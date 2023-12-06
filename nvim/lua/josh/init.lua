@@ -46,11 +46,20 @@ o.termguicolors = true -- True color support
 -- Keybinds --
 --------------
 
--- Just some examples, these are all personal preference
+-- nvim navigate splits
+set("n", "<C-h>", "<C-w>h")
+set("n", "<C-j>", "<C-w>j")
+set("n", "<C-k>", "<C-w>k")
+set("n", "<C-l>", "<C-w>l")
 
--- String syntax
+-- Jump to start/end of line
 set("n", "H", "^")
 set("n", "L", "$")
+
+-- System Clipboard
+set("n", "<leader>y", '"+y')
+set("v", "<leader>y", '"+y')
+set("n", "<leader>Y", '"+Y')
 
 -- Lua function syntax
 set("n", "<C-p>", function()

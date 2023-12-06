@@ -18,6 +18,8 @@ local lspInit = function()
       lsp_zero.default_setup,
     },
   })
+
+  -- require('plugins.cmp')
 end
 
 -------------
@@ -53,6 +55,7 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
     dependencies = { "nvim-lua/plenary.nvim" },
+    --[[
     config = function()
       require('telescope').setup {
         defaults = {
@@ -60,6 +63,7 @@ require("lazy").setup({
         }
       }
     end,
+    ]]--
   },
 
   -- File Explorer

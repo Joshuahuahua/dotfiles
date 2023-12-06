@@ -9,6 +9,8 @@ function GoToGitRoot
 
 Set-Alias -Name ... GoToGitRoot
 
+Set-Alias -Name lz lazygit
+
 Clear-Host
 
 Invoke-Expression (&starship init powershell)
