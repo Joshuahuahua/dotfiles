@@ -1,16 +1,23 @@
-fnm env --use-on-cd | Out-String | Invoke-Expression
+# Set Node Version
+fnm env --use-on-cd | Out-String | Invoke-Expression 
 
-$scripts = "S:\Users\Josh\Documents\Scripts"
-
+# '...' cd's to either a repo root, or ~
 function GoToGitRoot
 {
   cd (git rev-parse --show-toplevel 2>$null) || "~"
 }
 
+function runEza
+{
+  eza --icons=always -a --group-directories-first 
+}
+
+
+# Aliases
 Set-Alias -Name ... GoToGitRoot
+Set-Alias -Name lg lazygit
+Set-Alias -Name ls runEza
 
-Set-Alias -Name lz lazygit
-
+# Run Starship
 Clear-Host
-
 Invoke-Expression (&starship init powershell)

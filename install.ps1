@@ -1,14 +1,24 @@
+$ErrorActionPreference = "Stop"
 $repo_url = ""
 
-# install scoop
-irm get.scoop.sh | iex
+# Install/Update Scoop
+try
+{
+  scoop update
+} catch
+{
+  Invoke-RestMethod -Uri get.scoop.sh | Invoke-Expression
+  scoop update
+}
 
 # install dependencies
 scoop bucket add extras
-scoop install wezterm neovim gcc fnm fd ripgrep starship lazygit
+scoop install wezterm neovim gcc fnm fd ripgrep starship lazygit eza
+
+Exit
 
 # Clone repo
-git clone $repo_url ./dotfiles
+git clone "https://github.com/Joshuahuahua/dotfiles/" $HOME/dotfiles
 New-Item -Path $PROFILE -ItemType SymbolicLink -Value (Resolve-Path .\dotfiles\Microsoft.PowerShell_profile.ps1) -Force
 
 fnm install --lts

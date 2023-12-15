@@ -55,7 +55,6 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
     dependencies = { "nvim-lua/plenary.nvim" },
-    --[[
     config = function()
       require('telescope').setup {
         defaults = {
@@ -63,7 +62,6 @@ require("lazy").setup({
         }
       }
     end,
-    ]]--
   },
 
   -- File Explorer
@@ -99,10 +97,14 @@ require("lazy").setup({
   },
 
   -- LSP Stuffs
-  { "VonHeikemen/lsp-zero.nvim", branch = "v3.x", config = lspInit },
   "neovim/nvim-lspconfig",
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
+  {
+    "VonHeikemen/lsp-zero.nvim",
+    branch = "v3.x",
+    config = lspInit
+  },
 
   -- Completions
   "hrsh7th/nvim-cmp",
