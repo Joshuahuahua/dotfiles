@@ -14,8 +14,6 @@ try
 scoop bucket add extras
 scoop install wezterm neovim gcc fnm fd ripgrep starship lazygit eza
 
-Exit
-
 # Clone repo
 git clone "https://github.com/Joshuahuahua/dotfiles/" dotfiles
 New-Item -Path $PROFILE -ItemType SymbolicLink -Value (Resolve-Path .\dotfiles\Microsoft.PowerShell_profile.ps1) -Force
@@ -26,6 +24,8 @@ fnm install --lts
 # RESTART SHELL INSTANCE
 
 New-Item -Path $HOME\AppData\Local\nvim -ItemType SymbolicLink -Value (Resolve-Path .\dotfiles\nvim) -Force
+
+Exit
 
 # symlink .wezterm.lua ($HOME)
 # symlink nvim (%userprofile%\AppData\Local\nvim)`
