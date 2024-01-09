@@ -61,11 +61,16 @@ set("n", "<leader>y", '"+y')
 set("v", "<leader>y", '"+y')
 set("n", "<leader>Y", '"+Y')
 
--- Lua function syntax
+-- File Search
 set("n", "<C-p>", function()
   require("telescope.builtin").find_files()
 end)
 
+-- Live Grep
+set("n", "<C-f>", function()
+  require("telescope.builtin").live_grep()
+end)
+--
 -- Formatting
 set("n", "<leader>f", function()
   vim.lsp.buf.format { async = true }
