@@ -46,6 +46,9 @@ o.termguicolors = true -- True color support
 -- Keybinds --
 --------------
 
+-- Misc
+set("n", "<ESC>", ":noh<CR>")
+
 -- nvim navigate splits
 set("n", "<C-h>", "<C-w>h")
 set("n", "<C-j>", "<C-w>j")
