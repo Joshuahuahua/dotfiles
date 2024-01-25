@@ -64,6 +64,9 @@ set("n", "<leader>y", '"+y')
 set("v", "<leader>y", '"+y')
 set("n", "<leader>Y", '"+Y')
 
+-- Comment
+set("n", "<C-_>", "gcc") -- Ctrl+/    NOT WORKING
+
 -- File Search
 set("n", "<C-p>", function()
   require("telescope.builtin").find_files()

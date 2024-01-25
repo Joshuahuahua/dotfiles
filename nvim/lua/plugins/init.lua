@@ -114,4 +114,15 @@ require("lazy").setup({
   "hrsh7th/cmp-path",
   "hrsh7th/cmp-cmdline",
   "L3MON4D3/LuaSnip",
+
+
+  -- Comments
+  {
+    'numToStr/Comment.nvim',
+    opts = {},
+    lazy = false,
+    config = function()
+      require("plugins.comment")
+    end
+  }
 })
