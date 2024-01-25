@@ -1,27 +1,3 @@
----------
--- LSP --
----------
-
-local lspInit = function()
-  local lsp_zero = require("lsp-zero")
-
-  lsp_zero.on_attach(function(client, bufnr)
-    -- see :help lsp-zero-keybindings
-    -- to learn the available actions
-    lsp_zero.default_keymaps({ buffer = bufnr })
-  end)
-
-  require("mason").setup({})
-  require("mason-lspconfig").setup({
-    ensure_installed = {},
-    handlers = {
-      lsp_zero.default_setup,
-    },
-  })
-
-  -- require('plugins.cmp')
-end
-
 -------------
 -- Plugins --
 -------------
@@ -96,22 +72,38 @@ require("lazy").setup({
     end,
   },
 
-  -- LSP Stuffs
-  "neovim/nvim-lspconfig",
-  "williamboman/mason.nvim",
-  "williamboman/mason-lspconfig.nvim",
+  -- LSP Configuration & Plugins
   {
-    "VonHeikemen/lsp-zero.nvim",
-    branch = "v3.x",
-    config = lspInit
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      { 'williamboman/mason.nvim', config = true }, -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason-lspconfig.nvim',
+      { 'j-hui/fidget.nvim',       opts = {} },   -- Useful status updates for LSP. NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+      'folke/neodev.nvim',                        -- Additional lua configuration, makes nvim stuff amazing!
+    }
   },
 
   -- Completions
   "hrsh7th/nvim-cmp",
+  {
+    require("nvim-cmp").setup({
+snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  completion = {
+    completeopt = 'menu,menuone,noinsert',
+  }
+})
+},
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-nvim-lua",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
   "hrsh7th/cmp-cmdline",
   "L3MON4D3/LuaSnip",
+
+
+-- require("lua.plugins.cmp")
 })
