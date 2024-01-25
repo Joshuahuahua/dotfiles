@@ -7,9 +7,9 @@ function GoToGitRoot
   cd (git rev-parse --show-toplevel 2>$null) || "~"
 }
 
-function runEza
+function runEza([string]$path = ".")
 {
-  eza --icons=always -a --group-directories-first 
+  eza $path --icons=always -a --group-directories-first 
 }
 
 
