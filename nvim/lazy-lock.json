@@ -10,6 +10,7 @@
   "lsp-zero.nvim": { "branch": "v3.x", "commit": "98fe58a00c69f709b6b65e53aed56d86da92a4b7" },
   "mason-lspconfig.nvim": { "branch": "main", "commit": "4f81a9213fab94d4c074341acdf7118aaf959275" },
   "mason.nvim": { "branch": "main", "commit": "41e75af1f578e55ba050c863587cffde3556ffa6" },
+  "monorepo.nvim": { "branch": "main", "commit": "256a302900d6af6e032f1f2bf4f2407bd4569fe8" },
   "nvim-cmp": { "branch": "main", "commit": "0b751f6beef40fd47375eaf53d3057e0bfa317e4" },
   "nvim-lspconfig": { "branch": "master", "commit": "daaf00a77805e113acf8ccc02dd8c3403d691683" },
   "nvim-treesitter": { "branch": "master", "commit": "ba588ee0cf9df885f3f8698ae671330d82b4bdec" },

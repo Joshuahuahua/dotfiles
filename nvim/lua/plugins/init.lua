@@ -74,6 +74,17 @@ require("lazy").setup({
   --   },
 
 
+
+  {
+    "imNel/monorepo.nvim",
+    config = function()
+      require("monorepo").setup({
+        -- Your config here!
+      })
+    end,
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+  },
+
   -- Cool Syntax Highlighting
   {
     "nvim-treesitter/nvim-treesitter",
@@ -119,10 +130,10 @@ require("lazy").setup({
   -- Comments
   {
     'numToStr/Comment.nvim',
-    opts = {},
     lazy = false,
     config = function()
       require("plugins.comment")
     end
-  }
+  },
+
 })
