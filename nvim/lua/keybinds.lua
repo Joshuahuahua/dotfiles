@@ -46,8 +46,8 @@ set("n", "<leader>u", "<cmd>UndotreeToggle<CR><cmd>UndotreeFocus<CR>")
 
 -- LSP Binds
 set("n", "gd", "<cmd>Telescope lsp_definitions<CR>")
-set("n", "gh", function()
-	vim.lsp.buf.hover({ silent = true })
+set("n", "<S-k>", function()
+	vim.lsp.buf.hover()
 end)
 set("n", "gn", function()
 	vim.lsp.buf.rename()
