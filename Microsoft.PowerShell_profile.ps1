@@ -31,12 +31,21 @@ function runEza([string]$path = ".")
 # Set Node Version
 fnm env --use-on-cd | Out-String | Invoke-Expression 
 
-# Aliases
+# Update Powershell
+GetPowerShellUpdate
+Clear-Host
+
+# Aliases/Variables
 Set-Alias -Name ... GoToGitRoot
 Set-Alias -Name lg lazygit
 Set-Alias -Name ls runEza
+$user = Join-Path -Path $PSScriptRoot -ChildPath "user.ps1"
+
+# User Settings
+if (Test-Path $user -PathType Leaf) {
+    try { . $user } 
+    catch { Write-Error "Failed to execute script 'user.ps1'. $_" }
+} 
 
 # Run Starship
-GetPowerShellUpdate
-Clear-Host
 Invoke-Expression (&starship init powershell)
