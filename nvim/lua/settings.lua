@@ -72,6 +72,7 @@ require("telescope").setup({
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
+  ensure_installed = { "lua", "typescript", "javascript" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -91,7 +92,9 @@ local servers = {
   },
 }
 
-require("mason").setup()
+require("mason").setup({
+    PATH = "prepend", -- "skip" seems to cause the spawning error
+})
 require("mason-lspconfig").setup({
   ensure_installed = vim.tbl_keys(servers),
 })
@@ -119,7 +122,6 @@ require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup()
 
 -- Copilot (Disable suggestions, then add to cmp)
--- see `:Copilot`
 require("copilot").setup({
   suggestion = { enabled = false },
   panel = { enabled = false },
@@ -194,6 +196,7 @@ require("conform").setup({
     javascriptreact = { { "prettierd", "prettier" } },
     typescript = { { "prettierd", "prettier" } },
     typescriptreact = { { "prettierd", "prettier" } },
+    python = { "isort", "black" },
   },
   -- format_on_save = {
   -- 	-- These options will be passed to conform.format()
