@@ -64,8 +64,8 @@ set("n", "gk", function()
 	vim.diagnostic.goto_prev({ popup_opts = { focusable = false } })
 end)
 set("n", "<leader>f", function()
-  -- vim.lsp.buf.format()
-  require("conform").format()
+  vim.lsp.buf.format()
+  -- require("conform").format()
 end)
 
 -- Git
