@@ -79,6 +79,10 @@ require("nvim-treesitter.configs").setup({
   },
 })
 
+require('gitblame').setup {
+  enabled = false,
+}
+
 -- LSP
 local servers = {
   -- pyright = {},
