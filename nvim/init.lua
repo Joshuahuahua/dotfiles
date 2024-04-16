@@ -32,6 +32,7 @@ require("paq")({
 	"JoosepAlviste/nvim-ts-context-commentstring",
 	"f-person/git-blame.nvim",
 	"stevearc/conform.nvim",
+  { "schrieveslaach/sonarlint.nvim", url = "https://gitlab.com/schrieveslaach/sonarlint.nvim" },
 })
  
 require("settings")
