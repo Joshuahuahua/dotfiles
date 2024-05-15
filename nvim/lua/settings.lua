@@ -125,12 +125,13 @@ local luasnip = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup()
 
--- Copilot (Disable suggestions, then add to cmp)
-require("copilot").setup({
-  suggestion = { enabled = false },
-  panel = { enabled = false },
-})
-require("copilot_cmp").setup()
+-- -- Copilot (Disable suggestions, then add to cmp)
+-- require("copilot").setup({
+--   suggestion = { enabled = false },
+--   panel = { enabled = false },
+-- })
+-- require("copilot_cmp").setup()
+require("supermaven-nvim").setup({})
 
 cmp.setup({
   snippet = {
@@ -151,27 +152,27 @@ cmp.setup({
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     }),
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+    -- ["<Tab>"] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_locally_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { "i", "s" }),
+    -- ["<S-Tab>"] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_prev_item()
+    --   elseif luasnip.locally_jumpable(-1) then
+    --     luasnip.jump(-1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { "i", "s" }),
   }),
   sources = {
-    { name = "copilot", group_index = 2 },
+    -- { name = "copilot", group_index = 2 },
     { name = "nvim_lua" },
     { name = "nvim_lsp" },
     { name = "luasnip" },
@@ -220,10 +221,7 @@ require("conform").setup({
     typescript = { { "prettierd", "prettier" } },
     typescriptreact = { { "prettierd", "prettier" } },
     python = { "isort", "black" },
+    scss = { "prettier" },
+    css = { "prettier" },
   },
-  -- format_on_save = {
-  -- 	-- These options will be passed to conform.format()
-  -- 	timeout_ms = 500,
-  -- 	lsp_fallback = true,
-  -- },
 })
