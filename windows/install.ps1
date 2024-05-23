@@ -55,7 +55,7 @@ if (-not (Test-Path -Path "$env:LOCALAPPDATA\nvim-data\site\pack\paqs\start\paq-
 
 
 # Symlink PowerShell Config
-New-Item -Path $PROFILE -ItemType SymbolicLink -Value (Resolve-Path .\Microsoft.PowerShell_profile.ps1) -Force
+New-Item -Path $PROFILE -ItemType SymbolicLink -Value (Resolve-Path .\windows\Microsoft.PowerShell_profile.ps1) -Force
 
 fnm install --lts
 
