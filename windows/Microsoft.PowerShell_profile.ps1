@@ -1,17 +1,23 @@
 # Check once a day if a new powershell update exists
-function GetPowerShellUpdate
-{
-  $currDate = Get-Date -Format "MM-dd-yyyy"
-  try
-  { 
-    $lastChecked = Get-Content "~/.pwshCache" -ErrorAction Stop
-    if ($lastChecked -and [datetime]$currDate -gt [datetime]$lastChecked)
-    {
+function GetPowerShellUpdate {
+  $cacheFile = "~/.pwshCache"
+  $currDate = Get-Date
+
+  try {
+    if (Test-Path $cacheFile) {
+      $lastChecked = Get-Content $cacheFile -ErrorAction Stop
+      $lastCheckedDate = [datetime]::ParseExact($lastChecked, "MM-dd-yyyy", $null)
+
+      if ($currDate -gt $lastCheckedDate.AddDays(2)) {
+        winget upgrade --id Microsoft.Powershell # Update powershell (if required)
+        $currDate.ToString("MM-dd-yyyy") | Set-Content $cacheFile
+      }
+    } else {
       winget upgrade --id Microsoft.Powershell # Update powershell (if required)
+      $currDate.ToString("MM-dd-yyyy") | Set-Content $cacheFile
     }
-  } finally
-  { 
-    $currDate > "~/.pwshCache"
+  } catch {
+      Write-Error "An error occurred while checking for updates."
   }
 }
 
