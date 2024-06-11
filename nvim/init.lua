@@ -18,6 +18,9 @@ require("paq")({
 	"hrsh7th/cmp-nvim-lua",
 	"hrsh7th/cmp-cmdline",
 	"rafamadriz/friendly-snippets",
+
+  -- "folke/lazydev.nvim",           -- Add the lazydev.nvim plugin
+
 	-- "zbirenbaum/copilot.lua",
 	-- "zbirenbaum/copilot-cmp",
   "supermaven-inc/supermaven-nvim",
