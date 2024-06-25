@@ -13,7 +13,7 @@ try
 
 # Install Dependencies
 scoop bucket add extras
-scoop install wezterm neovim gcc fnm fd ripgrep starship lazygit eza python
+scoop install wezterm neovim gcc fnm fd ripgrep starship lazygit eza python zoxide
 
 try {
   pip install isort black
