@@ -97,7 +97,7 @@ local servers = {
 }
 
 require("mason").setup({
-    PATH = "prepend", -- "skip" seems to cause the spawning error
+  PATH = "prepend",   -- "skip" seems to cause the spawning error
 })
 require("mason-lspconfig").setup({
   ensure_installed = vim.tbl_keys(servers),
@@ -184,6 +184,9 @@ cmp.setup({
   },
 })
 
+require("noice").setup({})
+require("lualine").setup({})
+
 -- cmp on command
 cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline(),
@@ -224,6 +227,11 @@ require("conform").setup({
     scss = { "prettier" },
     css = { "prettier" },
   },
+  -- format_on_save = {
+  --   -- These options will be passed to conform.format()
+  --   timeout_ms = 500,
+  --   lsp_format = "fallback",
+  -- },
 })
 
 -- LazyDev configuration
