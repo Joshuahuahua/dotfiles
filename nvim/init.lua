@@ -44,5 +44,5 @@ require("paq")({
   { "schrieveslaach/sonarlint.nvim",   url = "https://gitlab.com/schrieveslaach/sonarlint.nvim" },
 })
 
-require("settings")
 require("keybinds")
+require("settings")

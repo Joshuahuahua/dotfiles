@@ -64,7 +64,7 @@ set("n", "gk", function()
   vim.diagnostic.goto_prev({ popup_opts = { focusable = false } })
 end)
 
-set("n", "<space>ca", function()
+set("n", "<leader>ca", function()
   vim.lsp.buf.code_action({
     -- filter
     apply = true
@@ -72,8 +72,8 @@ set("n", "<space>ca", function()
 end)
 
 set("n", "<leader>f", function()
-  vim.lsp.buf.format()
-  -- require("conform").format()
+  -- vim.lsp.buf.format()
+  require("conform").format()
 end)
 
 -- Git
