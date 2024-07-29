@@ -32,6 +32,7 @@ o.scrolloff = 8
 o.termguicolors = true
 o.conceallevel = 0
 o.concealcursor = ""
+o.laststatus = 3
 
 -- Theme
 vim.cmd.colorscheme("tokyonight-storm")
@@ -219,10 +220,10 @@ cmp.setup.cmdline(":", {
 require("conform").setup({
   formatters_by_ft = {
     lua = { "stylua" },
-    javascript = { { "prettierd", "prettier" } },
-    javascriptreact = { { "prettierd", "prettier" } },
-    typescript = { { "prettierd", "prettier" } },
-    typescriptreact = { { "prettierd", "prettier" } },
+    javascript = { { "prettier", "prettierd" } },
+    javascriptreact = { { "prettier", "prettierd" } },
+    typescript = { { "prettier", "prettierd" } },
+    typescriptreact = { { "prettier", "prettierd" } },
     python = { "isort", "black" },
     scss = { "prettier" },
     css = { "prettier" },
