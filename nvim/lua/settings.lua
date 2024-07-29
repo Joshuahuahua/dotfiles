@@ -73,7 +73,8 @@ require("telescope").setup({
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "lua", "typescript", "javascript" },
+  ensure_installed = { "lua", "typescript", "javascript", "markdown", "markdown_inline" },
+  auto_install = true,
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
@@ -215,6 +216,10 @@ cmp.setup.cmdline(":", {
 --     'typescriptreact',
 --   }
 -- })
+
+-- Markdown Preview
+require("render-markdown").setup({})
+
 
 -- Formatting
 require("conform").setup({

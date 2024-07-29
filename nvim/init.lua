@@ -21,13 +21,13 @@ require("paq")({
 
   -- "folke/lazydev.nvim",           -- Add the lazydev.nvim plugin
 
-  -- "zbirenbaum/copilot.lua",
-  -- "zbirenbaum/copilot-cmp",
   "supermaven-inc/supermaven-nvim",
   "nvim-tree/nvim-web-devicons",
   "nvim-lualine/lualine.nvim",
   "folke/noice.nvim",
   "MunifTanjim/nui.nvim",
+
+  'MeanderingProgrammer/markdown.nvim', -- Markdown Preview
 
   -- "onsails/lspkind.nvim",
 
