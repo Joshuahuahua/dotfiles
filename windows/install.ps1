@@ -68,6 +68,9 @@ New-Item -Path $HOME\AppData\Local\nvim -ItemType SymbolicLink -Value (Resolve-P
 # Symlink Wezterm Config
 New-Item -Path $HOME\.wezterm.lua -ItemType SymbolicLink -Value (Resolve-Path .\.wezterm.lua) -Force
 
+# C:\Users\joshua.hollander\AppData\Roaming\lazygit\config.yml
+New-Item -Path $HOME\AppData\Roaming\lazygit\config.yml -ItemType SymbolicLink -Value (Resolve-Path .\lazygit.yml) -Force
+
 # Install nvim packages
 nvim --headless +PaqSync +q
 Write-Host # New Line

@@ -240,6 +240,19 @@ require("conform").setup({
   -- },
 })
 
+-- Diagnostic settings
+vim.diagnostic.config({
+	underline = true,
+	virtual_text = false,
+	signs = true,
+	update_in_insert = false,
+	severity_sort = true,
+	float = {
+		style = "minimal",
+		source = "always",
+	},
+})
+
 -- LazyDev configuration
 -- require("lazydev").setup({
 --   library = {

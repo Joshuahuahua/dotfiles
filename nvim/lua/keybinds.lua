@@ -76,6 +76,10 @@ set("n", "<leader>f", function()
   require("conform").format()
 end)
 
+set("n", "gt", function()
+	require("tserror").show_diagnostics()
+end)
+
 -- Git
 local g = "<leader>g"
 set("n", g .. "s", "<cmd>Telescope git_status<CR>")
