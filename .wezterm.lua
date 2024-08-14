@@ -17,7 +17,9 @@ end
 config.color_scheme = "Tokyo Night Storm"
 
 -- Spawn a pwsh shell
-config.default_prog = { 'pwsh' }
+-- config.default_prog = { 'pwsh' }
+config.wsl_domains = { {name="WSL:Ubuntu", distribution="Ubuntu-24.04"} }
+config.default_domain = "WSL:Ubuntu"
 
 -- and finally, return the configuration to wezterm
 return config
