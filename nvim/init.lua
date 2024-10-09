@@ -29,6 +29,8 @@ require("paq")({
 
   'MeanderingProgrammer/markdown.nvim', -- Markdown Preview
 
+  'akinsho/toggleterm.nvim', -- Terminal
+
   -- "onsails/lspkind.nvim",
 
   -- Everything else

@@ -278,3 +278,22 @@ vim.diagnostic.config({
 --     return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
 --   end,
 -- })
+--
+
+require("toggleterm").setup()
+ 
+local Terminal = require("toggleterm.terminal").Terminal
+local hpm = Terminal:new({
+	cmd = "pnpm hpm",
+	dir = [[C:\Users\joshua.hollander\Documents\Development\Clients\Huddler\HuddlerHub\Workspace1]],
+	hidden = true,
+ 
+	direction = "float",
+ 
+	display_name = "Huddler Package Manager",
+})
+ 
+vim.keymap.set("n", "<leader>h", function()
+	hpm:toggle()
+end, { noremap = true, silent = true })
+vim.keymap.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
