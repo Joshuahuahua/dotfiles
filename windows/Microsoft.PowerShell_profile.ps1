@@ -8,7 +8,7 @@ function GetPowerShellUpdate {
       $lastChecked = Get-Content $cacheFile -ErrorAction Stop
       $lastCheckedDate = [datetime]::ParseExact($lastChecked, "MM-dd-yyyy", $null)
 
-      if ($currDate -gt $lastCheckedDate.AddDays(2)) {
+      if ($currDate -gt $lastCheckedDate.AddMonths(1)) {
         winget upgrade --id Microsoft.Powershell # Update powershell (if required)
         $currDate.ToString("MM-dd-yyyy") | Set-Content $cacheFile
       }

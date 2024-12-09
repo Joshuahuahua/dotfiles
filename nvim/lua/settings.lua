@@ -89,7 +89,7 @@ require('gitblame').setup {
 local servers = {
   -- pyright = {},
   rust_analyzer = {},
-  tsserver = {},
+  ts_ls = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -198,25 +198,6 @@ cmp.setup.cmdline(":", {
   }),
 })
 
--- -- Sonarlint
--- require('sonarlint').setup({
---   server = {
---     cmd = {
---       'sonarlint-language-server',
---       -- Ensure that sonarlint-language-server uses stdio channel
---       '-stdio',
---       '-analyzers',
---       -- paths to the analyzers you need, using those for python and java in this example
---       vim.fn.expand(vim.fn.stdpath("data").."mason/share/sonarlint-analyzers/sonarjs.jar"),
---       vim.fn.expand(vim.fn.stdpath("data").."mason/share/sonarlint-analyzers/sonarhtml.jar"),
---     }
---   },
---   filetypes = {
---     'typescript',
---     'typescriptreact',
---   }
--- })
-
 -- Markdown Preview
 require("render-markdown").setup({})
 
@@ -297,3 +278,23 @@ vim.keymap.set("n", "<leader>h", function()
 	hpm:toggle()
 end, { noremap = true, silent = true })
 vim.keymap.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
+
+
+-- Sonarlint
+-- require('sonarlint').setup({
+--   server = {
+--     cmd = {
+--       'sonarlint-language-server',
+--       -- Ensure that sonarlint-language-server uses stdio channel
+--       '-stdio',
+--       '-analyzers',
+--       -- paths to the analyzers you need, using those for python and java in this example
+--       vim.fn.expand(vim.fn.stdpath("data").."\\mason\\share\\sonarlint-analyzers\\sonarjs.jar"),
+--       vim.fn.expand(vim.fn.stdpath("data").."\\mason\\share\\sonarlint-analyzers\\sonarhtml.jar"),
+--     }
+--   },
+--   filetypes = {
+--     'typescript',
+--     'typescriptreact',
+--   }
+-- })
