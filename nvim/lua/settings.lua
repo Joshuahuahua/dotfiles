@@ -1,9 +1,12 @@
 local o = vim.opt
 local g = vim.g
+local a = vim.api
+local k = vim.keymap
 
 -- Leader Key
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+g.mapleader = " "
+g.maplocalleader = " "
+
 
 -- Line Numbers
 o.number = true
@@ -26,7 +29,9 @@ o.smartindent = true
 o.splitright = true
 o.splitbelow = true
 
+
 -- Others
+
 o.wrap = false
 o.scrolloff = 8
 o.termguicolors = true
@@ -34,23 +39,18 @@ o.conceallevel = 0
 o.concealcursor = ""
 o.laststatus = 3
 
+
 -- Theme
 vim.cmd.colorscheme("tokyonight-storm")
 
--- Comments
--- See: `:h comment-nvim`
-require("ts_context_commentstring").setup({
-  enable_autocmd = false,
-})
-require("Comment").setup({
-  pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-})
 
 -- Telescope
+
 require("telescope").setup({
   defaults = {
     initial_mode = "normal",
     selection_strategy = "reset",
+
     sorting_strategy = "ascending",
     layout_strategy = "horizontal",
     path_display = { "truncate" },
@@ -59,6 +59,7 @@ require("telescope").setup({
         prompt_position = "top",
         preview_width = 0.5,
       },
+
       width = 0.9,
       height = 0.9,
       preview_cutoff = 80,
@@ -67,26 +68,28 @@ require("telescope").setup({
   pickers = {
     find_files = {
       find_command = { "fd", "--type", "f", "-H", "-E", ".git" },
+
     },
   },
 })
 
 -- Treesitter
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "lua", "typescript", "javascript", "markdown", "markdown_inline" },
-  auto_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-})
+-- require("nvim-treesitter.configs").setup({
+--   highlight = {
+--     enable = true,
+--     additional_vim_regex_highlighting = false,
 
-require('gitblame').setup {
-  enabled = false,
-}
+--   },
+-- })
+
+
+-- require('gitblame').setup {
+--   enabled = false,
+-- }
 
 -- LSP
 local servers = {
+
   -- pyright = {},
   rust_analyzer = {},
   ts_ls = {},
@@ -99,12 +102,14 @@ local servers = {
 }
 
 require("mason").setup({
+
   PATH = "prepend",   -- "skip" seems to cause the spawning error
 })
 require("mason-lspconfig").setup({
   ensure_installed = vim.tbl_keys(servers),
+
 })
-require("neodev").setup()
+-- require("neodev").setup()
 require("fidget").setup({}) -- Notifications
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -112,22 +117,26 @@ capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 require("mason-lspconfig").setup_handlers({
   function(server_name)
+
     require("lspconfig")[server_name].setup({
       capabilities = capabilities,
       on_attach = nil,
       settings = servers[server_name],
+
       filetypes = (servers[server_name] or {}).filetypes,
     })
   end,
 })
 
 -- Completion
+
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup()
 
 -- -- Copilot (Disable suggestions, then add to cmp)
+
 -- require("copilot").setup({
 --   suggestion = { enabled = false },
 --   panel = { enabled = false },
@@ -139,6 +148,7 @@ cmp.setup({
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
+
     end,
   },
   completion = {
@@ -147,6 +157,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ["<C-n>"] = cmp.mapping.select_next_item(),
     ["<C-p>"] = cmp.mapping.select_prev_item(),
+
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-l>"] = cmp.mapping.complete({}),
@@ -165,29 +176,36 @@ cmp.setup({
     -- end, { "i", "s" }),
     -- ["<S-Tab>"] = cmp.mapping(function(fallback)
     --   if cmp.visible() then
+
     --     cmp.select_prev_item()
+
     --   elseif luasnip.locally_jumpable(-1) then
     --     luasnip.jump(-1)
     --   else
     --     fallback()
     --   end
+
     -- end, { "i", "s" }),
   }),
   sources = {
     -- { name = "copilot", group_index = 2 },
     { name = "nvim_lua" },
     { name = "nvim_lsp" },
+
     { name = "luasnip" },
+
     { name = "path" },
     { name = "buffer",  keyword_length = 5 },
   },
   experimental = {
+
     ghost_text = {},
   },
 })
 
 require("noice").setup({})
 require("lualine").setup({})
+
 
 -- cmp on command
 cmp.setup.cmdline(":", {
@@ -198,18 +216,20 @@ cmp.setup.cmdline(":", {
   }),
 })
 
+
 -- Markdown Preview
-require("render-markdown").setup({})
+-- require("render-markdown").setup({})
+
 
 
 -- Formatting
 require("conform").setup({
   formatters_by_ft = {
     lua = { "stylua" },
-    javascript = { { "prettier", "prettierd" } },
-    javascriptreact = { { "prettier", "prettierd" } },
-    typescript = { { "prettier", "prettierd" } },
-    typescriptreact = { { "prettier", "prettierd" } },
+    javascript = { "prettier" },
+    javascriptreact = { "prettier" },
+    typescript = { "prettier" },
+    typescriptreact = { "prettier" },
     python = { "isort", "black" },
     scss = { "prettier" },
     css = { "prettier" },
@@ -220,6 +240,7 @@ require("conform").setup({
   --   lsp_format = "fallback",
   -- },
 })
+
 
 -- Diagnostic settings
 vim.diagnostic.config({
@@ -234,6 +255,7 @@ vim.diagnostic.config({
 	},
 })
 
+
 -- LazyDev configuration
 -- require("lazydev").setup({
 --   library = {
@@ -245,56 +267,64 @@ vim.diagnostic.config({
 --     -- It can also be a table with trigger words / mods
 --     -- Only load luvit types when the `vim.uv` word is found
 --     { path = "luvit-meta/library", words = { "vim%.uv" } },
+
 --     -- always load the LazyVim library
 --     "LazyVim",
 --     -- Only load the lazyvim library when the `LazyVim` global is found
 --     { path = "LazyVim", words = { "LazyVim" } },
+
 --     -- Load the wezterm types when the `wezterm` module is required
 --     -- Needs `justinsgithub/wezterm-types` to be installed
 --     { path = "wezterm-types", mods = { "wezterm" } },
 --   },
 --   -- always enable unless `vim.g.lazydev_enabled = false`
 --   -- This is the default
+
 --   enabled = function()
 --     return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
 --   end,
 -- })
 --
 
+
 require("toggleterm").setup()
- 
+require("tmux").setup()
+
 local Terminal = require("toggleterm.terminal").Terminal
 local hpm = Terminal:new({
+
 	cmd = "pnpm hpm",
-	dir = [[C:\Users\joshua.hollander\Documents\Development\Clients\Huddler\HuddlerHub\Workspace1]],
+	dir = "~/development/huddler/workspace1",
 	hidden = true,
- 
 	direction = "float",
- 
 	display_name = "Huddler Package Manager",
 })
- 
-vim.keymap.set("n", "<leader>h", function()
+
+
+k.set("n", "<leader>h", function()
 	hpm:toggle()
 end, { noremap = true, silent = true })
-vim.keymap.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
+k.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
 
 
--- Sonarlint
--- require('sonarlint').setup({
---   server = {
---     cmd = {
---       'sonarlint-language-server',
---       -- Ensure that sonarlint-language-server uses stdio channel
---       '-stdio',
---       '-analyzers',
---       -- paths to the analyzers you need, using those for python and java in this example
---       vim.fn.expand(vim.fn.stdpath("data").."\\mason\\share\\sonarlint-analyzers\\sonarjs.jar"),
---       vim.fn.expand(vim.fn.stdpath("data").."\\mason\\share\\sonarlint-analyzers\\sonarhtml.jar"),
---     }
---   },
---   filetypes = {
---     'typescript',
---     'typescriptreact',
---   }
+-- require('csvview').setup({
+--   -- Your configuration options here
 -- })
+--
+--
+-- -- Create an augroup to manage related autocommands
+--
+-- a.nvim_create_augroup('CsvViewGroup', { clear = true })
+--
+-- -- Define an autocommand that runs CsvViewEnable when a CSV file is opened
+--
+-- a.nvim_create_autocmd('FileType', {
+--
+--   group = 'CsvViewGroup',
+--   pattern = 'csv',
+--   callback = function()
+--
+--     vim.cmd('CsvViewEnable')
+--   end,
+-- })
+
