@@ -1,3 +1,4 @@
+local vim = vim
 local o = vim.opt
 local g = vim.g
 local a = vim.api
@@ -93,6 +94,7 @@ local servers = {
   -- pyright = {},
   rust_analyzer = {},
   ts_ls = {},
+  tailwindcss = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -287,24 +289,27 @@ vim.diagnostic.config({
 --
 
 
-require("toggleterm").setup()
+-- Nel's HPM terminal extension
+-- require("toggleterm").setup()
 require("tmux").setup()
+--
+-- local Terminal = require("toggleterm.terminal").Terminal
+-- local hpm = Terminal:new({
+-- 	cmd = "pnpm hpm",
+-- 	dir = "~/development/huddler/workspace1",
+-- 	hidden = true,
+-- 	direction = "float",
+-- 	display_name = "Huddler Package Manager",
+-- })
+-- k.set("n", "<leader>h", function()
+-- 	hpm:toggle()
+-- end, { noremap = true, silent = true })
+-- k.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
 
-local Terminal = require("toggleterm.terminal").Terminal
-local hpm = Terminal:new({
-
-	cmd = "pnpm hpm",
-	dir = "~/development/huddler/workspace1",
-	hidden = true,
-	direction = "float",
-	display_name = "Huddler Package Manager",
-})
 
 
-k.set("n", "<leader>h", function()
-	hpm:toggle()
-end, { noremap = true, silent = true })
-k.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
+
+
 
 
 -- require('csvview').setup({
@@ -327,4 +332,3 @@ k.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
 --     vim.cmd('CsvViewEnable')
 --   end,
 -- })
-

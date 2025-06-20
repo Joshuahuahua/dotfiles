@@ -1,3 +1,4 @@
+local vim = vim
 local set = vim.keymap.set
 
 -- Window Keybinds
@@ -80,7 +81,7 @@ end)
 set("n", "<leader>ca", function()
   vim.lsp.buf.code_action({
     -- filter
-    apply = true
+    -- apply = true
   })
 end)
 
