@@ -1,0 +1,43 @@
+import = [
+  "tokyonight_storm.toml"
+]
+
+[shell]
+program = "wsl.exe ~ -d Ubuntu-24.04"
+
+[font]
+# normal = { family = "JetBrainsMono NF" }
+# size = 16 
+
+# normal = { family = "GeistMono Nerd Font" }
+normal = { family = "Liga SFMono Nerd Font" }
+
+# [keybinds]
+
+# [keybinds.normal]
+# binds = [
+#     { key = "Ctrl g", actions = ["SwitchToMode 'locked'"] },
+#     { key = "Ctrl p", actions = ["SwitchToMode 'pane'"] },
+#     { key = "Alt n", actions = ["NewPane"] },
+#     { key = "Alt h", actions = ["MoveFocusOrTab 'Left'"] },
+#     { key = "Alt Left", actions = ["MoveFocusOrTab 'Left'"] }
+# ]
+
+# [keybinds.pane]
+# binds = [
+#     { key = "h", actions = ["MoveFocus 'Left'"] },
+#     { key = "Left", actions = ["MoveFocus 'Left'"] },
+#     { key = "l", actions = ["MoveFocus 'Right'"] },
+#     { key = "Right", actions = ["MoveFocus 'Right'"] },
+#     { key = "j", actions = ["MoveFocus 'Down'"] },
+#     { key = "Down", actions = ["MoveFocus 'Down'"] },
+#     { key = "k", actions = ["MoveFocus 'Up'"] },
+#     { key = "Up", actions = ["MoveFocus 'Up'"] },
+#     { key = "p", actions = ["SwitchFocus"] }
+# ]
+
+# [keybinds.locked]
+# binds = [
+#     { key = "Ctrl g", actions = ["SwitchToMode 'normal'"] }
+# ]
+
