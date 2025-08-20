@@ -43,7 +43,7 @@ require("paq")({
   "folke/tokyonight.nvim",
   "mbbill/undotree",
   "nvim-lua/plenary.nvim",
-  "nvim-telescope/telescope.nvim",
+  {"nvim-telescope/telescope.nvim", branch = "0.1.x"},
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   "f-person/git-blame.nvim",
   "stevearc/conform.nvim",
