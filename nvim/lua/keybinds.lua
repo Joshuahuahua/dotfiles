@@ -42,11 +42,14 @@ set("n", "N", "Nzzzv")
 
 -- Telescope
 set("n", "<C-p>", function()
-  require("telescope.builtin").find_files()
+  require("telescope.builtin").find_files({
+    prompt_prefix = "🔍",
+  })
 end)
 set("n", "<C-f>", function()
-  require("telescope.builtin").live_grep()
-
+  require("telescope.builtin").live_grep({
+    prompt_prefix = "🔍",
+  })
 end)
 
 set("n", "<leader>b", function()
