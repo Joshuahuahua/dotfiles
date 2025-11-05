@@ -89,8 +89,11 @@ set("n", "<leader>ca", function()
 end)
 
 set("n", "<leader>f", function()
-  require("conform").format()
-  -- vim.lsp.buf.format()
+  require("conform").format { async = true, lsp_fallback = true }
+end)
+
+set("n", "<leader>ff", function()
+  vim.lsp.buf.format()
 end)
 
 set("n", "gt", function()
