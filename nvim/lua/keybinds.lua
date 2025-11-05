@@ -9,10 +9,10 @@ set("n", "<C-k>", "<C-w>k")
 set("n", "<C-l>", "<C-w>l")
 
 
-set({'n', 't'}, '<C-h>', '<CMD>lua require("tmux").move_left()<CR>')
-set({'n', 't'}, '<C-l>', '<CMD>lua require("tmux").move_right()<CR>')
-set({'n', 't'}, '<C-k>', '<CMD>lua require("tmux").move_top()<CR>')
-set({'n', 't'}, '<C-j>', '<CMD>lua require("tmux").move_bottom()<CR>')
+set({ 'n', 't' }, '<C-h>', '<CMD>lua require("tmux").move_left()<CR>')
+set({ 'n', 't' }, '<C-l>', '<CMD>lua require("tmux").move_right()<CR>')
+set({ 'n', 't' }, '<C-k>', '<CMD>lua require("tmux").move_top()<CR>')
+set({ 'n', 't' }, '<C-j>', '<CMD>lua require("tmux").move_bottom()<CR>')
 
 
 -- System Clipboard
@@ -83,7 +83,6 @@ end)
 
 set("n", "<leader>ca", function()
   vim.lsp.buf.code_action({
-    -- filter
     -- apply = true
   })
 end)
@@ -97,7 +96,7 @@ set("n", "<leader>ff", function()
 end)
 
 set("n", "gt", function()
-	require("tserror").show_diagnostics()
+  require("tserror").show_diagnostics()
 end)
 
 -- Git

@@ -30,9 +30,7 @@ o.smartindent = true
 o.splitright = true
 o.splitbelow = true
 
-
 -- Others
-
 o.wrap = false
 o.scrolloff = 8
 o.termguicolors = true
@@ -46,21 +44,15 @@ vim.cmd.colorscheme("tokyonight-storm")
 
 
 -- Telescope
-
 require("telescope").setup({
   defaults = {
     initial_mode = "normal",
     selection_strategy = "reset",
-
     sorting_strategy = "ascending",
     layout_strategy = "horizontal",
     path_display = { "truncate" },
     layout_config = {
-      horizontal = {
-        prompt_position = "top",
-        preview_width = 0.5,
-      },
-
+      horizontal = { prompt_position = "top", preview_width = 0.5 },
       width = 0.9,
       height = 0.9,
       preview_cutoff = 80,
@@ -69,10 +61,10 @@ require("telescope").setup({
   pickers = {
     find_files = {
       find_command = { "fd", "--type", "f", "-H", "-E", ".git" },
-
     },
   },
 })
+
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
@@ -83,14 +75,9 @@ require("nvim-treesitter.configs").setup({
 })
 
 
--- require('gitblame').setup {
---   enabled = false,
--- }
-
 -- LSP
 local servers = {
-
-  -- pyright = {},
+  pyright = {},
   rust_analyzer = {},
   ts_ls = {},
   tailwindcss = {},
@@ -104,13 +91,12 @@ local servers = {
 
 require("mason").setup({
 
-  PATH = "prepend",   -- "skip" seems to cause the spawning error
+  PATH = "prepend", -- "skip" seems to cause the spawning error
 })
 require("mason-lspconfig").setup({
   ensure_installed = vim.tbl_keys(servers),
 })
 
--- require("neodev").setup()
 require("fidget").setup({}) -- Notifications
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -130,26 +116,17 @@ capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 -- })
 
 -- Completion
-
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup()
 
--- -- Copilot (Disable suggestions, then add to cmp)
-
--- require("copilot").setup({
---   suggestion = { enabled = false },
---   panel = { enabled = false },
--- })
--- require("copilot_cmp").setup()
 require("supermaven-nvim").setup({})
 
 cmp.setup({
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
-
     end,
   },
   completion = {
@@ -199,7 +176,6 @@ cmp.setup({
     { name = "buffer",  keyword_length = 5 },
   },
   experimental = {
-
     ghost_text = {},
   },
 })
@@ -218,11 +194,6 @@ cmp.setup.cmdline(":", {
 })
 
 
--- Markdown Preview
--- require("render-markdown").setup({})
-
-
-
 -- Formatting
 require("conform").setup({
   formatters_by_ft = {
@@ -235,26 +206,24 @@ require("conform").setup({
     scss = { "prettier" },
     css = { "prettier" },
   },
-  -- format_on_save = {
-  --   -- These options will be passed to conform.format()
-  --   timeout_ms = 500,
-  --   lsp_format = "fallback",
-  -- },
 })
 
 
 -- Diagnostic settings
 vim.diagnostic.config({
-	underline = true,
-	virtual_text = false,
-	signs = true,
-	update_in_insert = false,
-	severity_sort = true,
-	float = {
-		style = "minimal",
-		source = "always",
-	},
+  underline = true,
+  virtual_text = false,
+  signs = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    style = "minimal",
+    source = "always",
+  },
 })
+
+require("tmux").setup()
+
 
 
 -- LazyDev configuration
@@ -286,48 +255,3 @@ vim.diagnostic.config({
 --   end,
 -- })
 --
-
-
--- Nel's HPM terminal extension
--- require("toggleterm").setup()
-require("tmux").setup()
---
--- local Terminal = require("toggleterm.terminal").Terminal
--- local hpm = Terminal:new({
--- 	cmd = "pnpm hpm",
--- 	dir = "~/development/huddler/workspace1",
--- 	hidden = true,
--- 	direction = "float",
--- 	display_name = "Huddler Package Manager",
--- })
--- k.set("n", "<leader>h", function()
--- 	hpm:toggle()
--- end, { noremap = true, silent = true })
--- k.set("t", "<esc>", [[<C-\><C-n><C-W>w]])
-
-
-
-
-
-
-
--- require('csvview').setup({
---   -- Your configuration options here
--- })
---
---
--- -- Create an augroup to manage related autocommands
---
--- a.nvim_create_augroup('CsvViewGroup', { clear = true })
---
--- -- Define an autocommand that runs CsvViewEnable when a CSV file is opened
---
--- a.nvim_create_autocmd('FileType', {
---
---   group = 'CsvViewGroup',
---   pattern = 'csv',
---   callback = function()
---
---     vim.cmd('CsvViewEnable')
---   end,
--- })

@@ -31,10 +31,10 @@ require("paq")({
   "MunifTanjim/nui.nvim",
 
 
-  'MeanderingProgrammer/markdown.nvim', -- Markdown Preview
+  "MeanderingProgrammer/markdown.nvim", -- Markdown Preview
 
 
-  'akinsho/toggleterm.nvim', -- Terminal
+  "akinsho/toggleterm.nvim", -- Terminal
 
   -- "onsails/lspkind.nvim",
 
