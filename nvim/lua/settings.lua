@@ -13,6 +13,8 @@ g.maplocalleader = " "
 o.number = true
 o.numberwidth = 4
 o.relativenumber = true
+o.termguicolors = true
+require("config.line_numbers")
 
 -- Netrw
 g.netrw_keepdir = 1
