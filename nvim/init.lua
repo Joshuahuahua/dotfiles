@@ -38,6 +38,8 @@ require("paq")({
 
   -- "onsails/lspkind.nvim",
 
+  "norcalli/nvim-colorizer.lua", -- Colorizer
+
 
   -- Everything else
   "folke/tokyonight.nvim",

@@ -226,6 +226,22 @@ vim.diagnostic.config({
 
 require("tmux").setup()
 
+require("colorizer").setup(
+  { "*" },
+  {
+    RGB      = true, -- #RGB
+    RRGGBB   = true, -- #RRGGBB
+    rgb_fn   = true, -- rgb(), rgba()
+    hsl_fn   = true, -- hsl(), hsla()
+    names    = false, -- Blue, red, etc.
+    css      = true,
+    css_fn   = true,
+    tailwind = true,
+    mode     = "background", -- or "foreground"
+  }
+)
+
+
 
 
 -- LazyDev configuration
