@@ -204,6 +204,7 @@ require("conform").setup({
     javascriptreact = { "prettier" },
     typescript = { "prettier" },
     typescriptreact = { "prettier" },
+    html = { "prettier" },
     python = { "isort", "black" },
     scss = { "prettier" },
     css = { "prettier" },
@@ -229,10 +230,10 @@ require("tmux").setup()
 require("colorizer").setup(
   { "*" },
   {
-    RGB      = true, -- #RGB
-    RRGGBB   = true, -- #RRGGBB
-    rgb_fn   = true, -- rgb(), rgba()
-    hsl_fn   = true, -- hsl(), hsla()
+    RGB      = true,  -- #RGB
+    RRGGBB   = true,  -- #RRGGBB
+    rgb_fn   = true,  -- rgb(), rgba()
+    hsl_fn   = true,  -- hsl(), hsla()
     names    = false, -- Blue, red, etc.
     css      = true,
     css_fn   = true,
