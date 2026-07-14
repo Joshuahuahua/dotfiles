@@ -100,6 +100,7 @@ require("mason").setup({
 })
 require("mason-lspconfig").setup({
   ensure_installed = vim.tbl_keys(servers),
+  automatic_enable = false,
 })
 
 require("fidget").setup({}) -- Notifications
@@ -107,14 +108,13 @@ require("fidget").setup({}) -- Notifications
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local lspconfig = require("lspconfig")
 for server_name, server_settings in pairs(servers) do
-  lspconfig[server_name].setup({
+  vim.lsp.config(server_name, {
     capabilities = capabilities,
-    on_attach = nil,
     settings = server_settings,
     filetypes = server_settings.filetypes,
   })
+  vim.lsp.enable(server_name)
 end
 
 -- Completion
