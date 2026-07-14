@@ -1,0 +1,6 @@
+import = [
+  "../alacritty/alacritty.toml"
+]
+
+[shell]
+program = "/usr/bin/zsh"

@@ -2,9 +2,6 @@ import = [
   "tokyonight_storm.toml"
 ]
 
-[shell]
-program = "wsl.exe ~ -d Ubuntu-24.04"
-
 [font]
 # normal = { family = "JetBrainsMono NF" }
 # size = 16 

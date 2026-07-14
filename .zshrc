@@ -92,9 +92,9 @@ alias size="stat -c %s"
 eval "$(zoxide init zsh)"
 
 # fnm
-FNM_PATH="/home/josh/.local/share/fnm"
+FNM_PATH="$HOME/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/josh/.local/share/fnm:$PATH"
+  export PATH="$FNM_PATH:$PATH"
   eval "`fnm env`"
 fi
 
@@ -103,7 +103,7 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 # pnpm
 # Keep PNPM_HOME on PATH for global package binaries, but append it so
 # Corepack-managed pnpm from the active Node version wins first.
-export PNPM_HOME="/home/josh/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PATH:$PNPM_HOME" ;;
@@ -119,7 +119,7 @@ eval "$(starship init zsh)"
 
 # Path stuff
 # Created by `pipx` on 2026-04-09 05:24:29
-export PATH="$PATH:/home/josh/.local/bin"
+export PATH="$PATH:$HOME/.local/bin"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

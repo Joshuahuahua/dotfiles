@@ -240,17 +240,17 @@ main() {
   pipx install isort || true
 
   log "Symlinking dotfiles"
-  symlink_path "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
-  symlink_path "$REPO_ROOT/.tmux.conf" "$HOME/.tmux.conf"
+  symlink_path "$REPO_ROOT/mint/.zshrc" "$HOME/.zshrc"
+  symlink_path "$REPO_ROOT/mint/.tmux.conf" "$HOME/.tmux.conf"
   symlink_path "$REPO_ROOT/nvim" "$HOME/.config/nvim"
-  symlink_path "$REPO_ROOT/alacritty" "$HOME/.config/alacritty"
+  symlink_path "$REPO_ROOT/mint/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
   symlink_path "$REPO_ROOT/lazygit.yml" "$HOME/.config/lazygit/config.yml"
 
   install_paq
 
   log "Setup complete"
   printf '\nNotes:\n'
-  printf '  - Your Alacritty config is symlinked from the repo, but it currently contains a Windows/WSL shell setting.\n'
+  printf '  - Mint entrypoint configs live in mint/ and source shared root configs where needed.\n'
   printf '  - If you want zsh as your default shell, run: chsh -s "$(command -v zsh)"\n'
   printf '  - You may want to open Neovim and run :PaqInstall or :PaqSync after first bootstrapping.\n'
 }
