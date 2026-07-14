@@ -49,6 +49,7 @@ require("paq")({
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   "f-person/git-blame.nvim",
   "stevearc/conform.nvim",
+  "vyfor/cord.nvim",
 
   "aserowy/tmux.nvim",
 })

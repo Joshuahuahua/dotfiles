@@ -184,6 +184,24 @@ cmp.setup({
 
 require("noice").setup({})
 require("lualine").setup({})
+require("cord").setup({
+  text = {
+    workspace = "",
+    viewing = "Viewing a file",
+    editing = "Editing a file",
+    file_browser = "Browsing files",
+    plugin_manager = "Managing plugins",
+    lsp = "Configuring LSP",
+    docs = "Reading docs",
+    vcs = "Working with Git",
+    notes = "Taking notes",
+    debug = "Debugging",
+    test = "Running tests",
+    diagnostics = "Fixing problems",
+    games = "Playing a game",
+    terminal = "Using the terminal",
+  },
+})
 
 
 -- cmp on command
