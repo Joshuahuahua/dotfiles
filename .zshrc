@@ -76,37 +76,18 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
+# Aliases
+alias zshconfig="nvim ~/.zshrc"
+alias zshrc="nvim ~/.zshrc"
 alias lg="lazygit"
 alias t="tmux"
+alias p="pwsh"
+alias ls="eza -a -x --icons --group-directories-first"
+alias ask="ollama run gemma4:e2b --think=false"
+alias say="spd-say"
+alias pic="chafa"
+alias img="chafa"
+alias size="stat -c %s"
 
 eval "$(zoxide init zsh)"
 
@@ -120,12 +101,53 @@ fi
 eval "$(fnm env --use-on-cd --shell zsh)"
 
 # pnpm
+# Keep PNPM_HOME on PATH for global package binaries, but append it so
+# Corepack-managed pnpm from the active Node version wins first.
 export PNPM_HOME="/home/josh/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *) export PATH="$PATH:$PNPM_HOME" ;;
 esac
 # pnpm end
 
 
+# Starship
 eval "$(starship init zsh)"
+
+
+
+
+# Path stuff
+# Created by `pipx` on 2026-04-09 05:24:29
+export PATH="$PATH:/home/josh/.local/bin"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# Autoload nvm when changing directories
+# autoload -U add-zsh-hook
+#
+# load-nvmrc() {
+#   local nvmrc_path
+#   nvmrc_path="$(nvm_find_nvmrc)"
+#
+#   if [ -n "$nvmrc_path" ]; then
+#     local nvmrc_node_version
+#     nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+#
+#     if [ "$nvmrc_node_version" = "N/A" ]; then
+#       nvm install
+#     elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+#       nvm use
+#     fi
+#   elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+#     echo "Reverting to nvm default version"
+#     nvm use default
+#   fi
+# }
+#
+# add-zsh-hook chpwd load-nvmrc
+# load-nvmrc
+
+
