@@ -1,12 +1,36 @@
 {
-  "next_id": 2,
+  "next_id": 6,
   "items": [
     {
-      "id": 1,
-      "text": "symlink Pi skills into the dotfiles repo if not already done",
+      "id": 2,
+      "text": "repoint ~/.zshrc to mint/.zshrc from the dotfiles repo",
       "status": "open",
-      "created_at": "2026-07-14T09:28:58Z",
-      "updated_at": "2026-07-14T09:28:58Z",
+      "created_at": "2026-07-14T09:31:40Z",
+      "updated_at": "2026-07-14T09:31:40Z",
+      "notes": []
+    },
+    {
+      "id": 3,
+      "text": "symlink ~/.tmux.conf to mint/.tmux.conf from the dotfiles repo",
+      "status": "open",
+      "created_at": "2026-07-14T09:31:40Z",
+      "updated_at": "2026-07-14T09:31:40Z",
+      "notes": []
+    },
+    {
+      "id": 4,
+      "text": "symlink ~/.config/alacritty/alacritty.toml to mint/alacritty.toml from the dotfiles repo",
+      "status": "open",
+      "created_at": "2026-07-14T09:31:40Z",
+      "updated_at": "2026-07-14T09:31:40Z",
+      "notes": []
+    },
+    {
+      "id": 5,
+      "text": "symlink ~/.config/lazygit/config.yml to lazygit.yml from the dotfiles repo",
+      "status": "open",
+      "created_at": "2026-07-14T09:31:41Z",
+      "updated_at": "2026-07-14T09:31:41Z",
       "notes": []
     }
   ]
