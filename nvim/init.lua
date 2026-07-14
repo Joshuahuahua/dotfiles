@@ -7,7 +7,7 @@ require("paq")({
   "williamboman/mason-lspconfig.nvim",
 
   "j-hui/fidget.nvim",
-  "folke/neodev.nvim",
+  "folke/lazydev.nvim",
 
   -- Completion
   "hrsh7th/nvim-cmp",
@@ -20,8 +20,6 @@ require("paq")({
   "hrsh7th/cmp-nvim-lua",
   "hrsh7th/cmp-cmdline",
   "rafamadriz/friendly-snippets",
-
-  -- "folke/lazydev.nvim",           -- Add the lazydev.nvim plugin
 
   "supermaven-inc/supermaven-nvim",
   "nvim-tree/nvim-web-devicons",
