@@ -246,11 +246,21 @@ main() {
   symlink_path "$REPO_ROOT/mint/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
   symlink_path "$REPO_ROOT/lazygit.yml" "$HOME/.config/lazygit/config.yml"
 
+  log "Symlinking Pi managed files"
+  symlink_path "$REPO_ROOT/pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+  symlink_path "$REPO_ROOT/pi/agent/settings.json" "$HOME/.pi/agent/settings.json"
+  symlink_path "$REPO_ROOT/pi/agent/extensions" "$HOME/.pi/agent/extensions"
+  symlink_path "$REPO_ROOT/pi/agent/memory/README.md" "$HOME/.pi/agent/memory/README.md"
+  symlink_path "$REPO_ROOT/pi/agent/memory/bin" "$HOME/.pi/agent/memory/bin"
+  symlink_path "$REPO_ROOT/pi/agent/memory/MEMORY.md" "$HOME/.pi/agent/memory/MEMORY.md"
+  symlink_path "$REPO_ROOT/pi/agent/memory/projects" "$HOME/.pi/agent/memory/projects"
+
   install_paq
 
   log "Setup complete"
   printf '\nNotes:\n'
   printf '  - Mint entrypoint configs live in mint/ and source shared root configs where needed.\n'
+  printf '  - Pi auth.json and session logs are intentionally left local and are not symlinked from the repo.\n'
   printf '  - If you want zsh as your default shell, run: chsh -s "$(command -v zsh)"\n'
   printf '  - You may want to open Neovim and run :PaqInstall or :PaqSync after first bootstrapping.\n'
 }

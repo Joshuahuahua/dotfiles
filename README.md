@@ -11,6 +11,7 @@ Shared/base config lives at the repo root:
 - `alacritty/alacritty.toml`
 - `nvim/`
 - `lazygit.yml`
+- `pi/agent/` (managed subset of `~/.pi/agent/`)
 
 OS-specific entrypoints live in per-OS folders:
 
@@ -53,6 +54,15 @@ The Mint setup is intended to symlink:
 - `~/.config/alacritty/alacritty.toml` -> `mint/alacritty.toml`
 - `~/.config/nvim` -> `nvim/`
 - `~/.config/lazygit/config.yml` -> `lazygit.yml`
+- `~/.pi/agent/AGENTS.md` -> `pi/agent/AGENTS.md`
+- `~/.pi/agent/settings.json` -> `pi/agent/settings.json`
+- `~/.pi/agent/extensions` -> `pi/agent/extensions`
+- `~/.pi/agent/memory/README.md` -> `pi/agent/memory/README.md`
+- `~/.pi/agent/memory/bin` -> `pi/agent/memory/bin`
+- `~/.pi/agent/memory/MEMORY.md` -> `pi/agent/memory/MEMORY.md`
+- `~/.pi/agent/memory/projects` -> `pi/agent/memory/projects`
+
+Pi runtime/auth files such as `auth.json` and `sessions/` are intentionally left local and are not stored in the repo.
 
 ## Mint bootstrap
 
@@ -77,3 +87,18 @@ Windows setup lives in:
 - `windows/Microsoft.PowerShell_profile.ps1`
 
 That side of the repo uses the same general idea: shared config where possible, with platform-specific entrypoints where needed.
+
+## Pi agent files
+
+The repo includes a managed subset of `~/.pi/agent/` under:
+
+- `pi/agent/`
+
+This is meant for syncable Pi config/tooling such as:
+
+- `AGENTS.md`
+- `settings.json`
+- extensions
+- memory tooling and memory markdown files
+
+Sensitive and machine-local runtime files are intentionally excluded.
