@@ -250,6 +250,7 @@ main() {
   symlink_path "$REPO_ROOT/pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
   symlink_path "$REPO_ROOT/pi/agent/settings.json" "$HOME/.pi/agent/settings.json"
   symlink_path "$REPO_ROOT/pi/agent/extensions" "$HOME/.pi/agent/extensions"
+  symlink_path "$REPO_ROOT/pi/agent/skills" "$HOME/.pi/agent/skills"
   symlink_path "$REPO_ROOT/pi/agent/memory/README.md" "$HOME/.pi/agent/memory/README.md"
   symlink_path "$REPO_ROOT/pi/agent/memory/bin" "$HOME/.pi/agent/memory/bin"
   symlink_path "$REPO_ROOT/pi/agent/memory/MEMORY.md" "$HOME/.pi/agent/memory/MEMORY.md"

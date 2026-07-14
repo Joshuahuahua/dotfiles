@@ -7,6 +7,7 @@ Included here:
 - `settings.json`
 - `extensions/`
 - `memory/`
+- `skills/`
 
 Intentionally **not** included here:
 - `auth.json`

@@ -1,0 +1,13 @@
+{
+  "next_id": 2,
+  "items": [
+    {
+      "id": 1,
+      "text": "symlink Pi skills into the dotfiles repo if not already done",
+      "status": "open",
+      "created_at": "2026-07-14T09:28:58Z",
+      "updated_at": "2026-07-14T09:28:58Z",
+      "notes": []
+    }
+  ]
+}
