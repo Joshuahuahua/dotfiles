@@ -88,6 +88,7 @@ alias say="spd-say"
 alias pic="chafa"
 alias img="chafa"
 alias size="stat -c %s"
+dprint() { ( cd /home/josh/development/personal/devopsPrinter && pnpm dev -- "$@" ) }
 
 eval "$(zoxide init zsh)"
 
