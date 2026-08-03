@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.81.1",
+  "lastChangelogVersion": "0.83.0",
   "theme": "dark",
   "defaultProvider": "github-copilot",
-  "defaultModel": "claude-opus-4.8",
+  "defaultModel": "claude-sonnet-5",
   "defaultThinkingLevel": "medium"
 }
