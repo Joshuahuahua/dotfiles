@@ -81,6 +81,19 @@ References
 - Branch Naming Conventions: https://dev.azure.com/diversus/Huddler%20-%20Product/_wiki/wikis/Huddler---Product.wiki/Branch-Naming-Conventions
 ```
 
+## Old DocHQ wiki (backup for DocHQ-specific topics)
+
+There is also an **old DocHQ wiki** at:
+
+`/home/josh/development/work/huddler/OldDocHQWiki`
+
+Use this only as a **backup source for DocHQ-specific questions** when the
+answer cannot be found in the main Huddler wiki above. Search it the same way
+(list/grep `.md` files, shortlist, read), and clearly note in your answer that
+the information came from the old DocHQ wiki (since it may be outdated), citing
+the file path. Do not use it for general Huddler/Hub questions — check the main
+wiki first and only fall back to this one for DocHQ-specific gaps.
+
 ## Rules
 
 - Always ground product answers in the wiki files; don't rely on memory or
@@ -90,3 +103,6 @@ References
 - Some `.md` files are empty stubs (0 bytes) or short index pages; skip stubs and
   follow into the matching folder of the same name for the real content.
 - Mention the source article path(s) in your answer.
+- For DocHQ-specific questions not covered by the main wiki, fall back to the
+  old DocHQ wiki at `/home/josh/development/work/huddler/OldDocHQWiki` and flag
+  that the info came from there.
