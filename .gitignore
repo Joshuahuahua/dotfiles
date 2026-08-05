@@ -1,3 +1,4 @@
 pi/agent/skills/azure-devops/.pat
+pi/agent/skills/toggl-track/.token
 __pycache__/
 *.pyc
