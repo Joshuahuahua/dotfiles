@@ -52,6 +52,17 @@ def type_filter_clause(types=None):
     return f"[System.WorkItemType] IN ({quoted})"
 
 
+def is_me(cfg, identity):
+    """True if an Azure DevOps identity object (createdBy/author/etc.) refers
+    to the configured user, matching on email (uniqueName) or display name."""
+    if not identity:
+        return False
+    unique_name = (identity.get("uniqueName") or "").lower()
+    display_name = (identity.get("displayName") or "").lower()
+    me = cfg["me"].lower()
+    return unique_name == me or display_name == me.split("@")[0].replace(".", " ")
+
+
 def find_pat_file():
     candidates = []
     env_file = os.environ.get("AZDO_PAT_FILE")
@@ -250,15 +261,18 @@ def cmd_prs(cfg, args):
         effective_status = "all"
     if effective_status != "all":
         params["searchCriteria.status"] = effective_status
-    if mine:
-        params["searchCriteria.creatorId"] = cfg["me"]
+    # Note: searchCriteria.creatorId requires a GUID identity, not an email,
+    # so "mine" filtering is done client-side below instead of via the API.
     if source_branch:
         ref = source_branch if source_branch.startswith("refs/heads/") else f"refs/heads/{source_branch}"
         params["searchCriteria.sourceRefName"] = ref
 
     url = project_url(cfg, path) + "?" + urllib.parse.urlencode(params)
     result = request(cfg, "GET", url)
-    for pr in result.get("value", []):
+    prs = result.get("value", [])
+    if mine:
+        prs = [pr for pr in prs if is_me(cfg, pr.get("createdBy", {}))]
+    for pr in prs:
         print(
             f"#{pr['pullRequestId']} [{pr['status']}] {pr['title']} "
             f"({pr['repository']['name']}, by {pr['createdBy']['displayName']}, branch: {pr['sourceRefName']})"
