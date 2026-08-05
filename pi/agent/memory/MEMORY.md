@@ -44,3 +44,6 @@
 
 ## Remembered items
 - Dotfiles repo is at /home/josh/development/clones/dotfiles (contains .zshrc, pi/agent config, etc.). Whenever changes appear there (e.g. after editing memory, settings, skills, zshrc), commit them in logical/split commits by topic — but never push, unless the user explicitly asks to push. _(saved 2026-08-03)_
+
+## Remembered items
+- Distinguish user's two notification-style requests: if they say "let me know" (or similar phrasing implying being told/informed), use the voice/say command (spd-say). If they say "notify me" (or use the word 'notify'), use the desktop notification command (notify-send -u critical "title" "message"). Don't conflate the two triggers. _(saved 2026-08-04)_
