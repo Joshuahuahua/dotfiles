@@ -102,3 +102,8 @@ end)
 -- Git
 local g = "<leader>g"
 set("n", g .. "s", "<cmd>Telescope git_status<CR>")
+
+-- Git Blame
+set("n", g .. "b", "<cmd>GitBlameToggle<CR>") -- toggle inline blame on/off
+set("n", g .. "Y", "<cmd>GitBlameCopyCommitURL<CR>") -- yank commit URL
+set("n", g .. "o", "<cmd>GitBlameOpenCommitURL<CR>") -- open commit in browser
