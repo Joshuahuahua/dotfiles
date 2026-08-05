@@ -16,6 +16,7 @@ Use this skill whenever asked to:
 - Read the comments/threads on a pull request.
 - "Check the comments for this PR" / "check the comments" with no PR
   specified — detect the current git branch and find the matching open PR.
+- "Open/launch this PR" (or a specific PR) in the browser.
 
 ## Configuration
 
@@ -129,8 +130,25 @@ python3 devops.py here --path /home/josh/development/work/huddler/hub/workspace2
 If no open/draft PR has the current branch as its source branch, `here`
 reports that clearly instead of guessing.
 
-Prints each comment thread with its status (active/fixed/closed/etc.) and the
-non-system comments inside it, author + content.
+Prints each comment thread with its status (active/fixed/closed/etc.), a
+direct deep link to that thread (`...pullrequest/<id>?discussionId=<threadId>`),
+and the non-system comments inside it, author + content.
+
+### Open a PR in the browser
+
+```bash
+# Explicit repo + PR id
+python3 devops.py open "Huddler - Product" 3808
+
+# "Open/launch this PR" with nothing specified — detects the current git
+# branch (like `here`) and opens the matching open/draft PR
+python3 devops.py open
+python3 devops.py open --path /home/josh/development/work/huddler/hub/workspace2
+```
+
+Prints the PR's web URL and launches it via `xdg-open` (default browser).
+If no matching PR is found for the current branch, it says so instead of
+guessing.
 
 ## Notes
 

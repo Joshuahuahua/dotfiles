@@ -20,6 +20,7 @@ Usage:
   devops.py pr-comments <repo> <pr-id>
   devops.py pr <repo> <pr-id>
   devops.py here [--path DIR]            # find PR for current git branch + show unresolved comments
+  devops.py open [<repo> <pr-id>] [--path DIR]   # open a PR's web URL in the browser (defaults to current git branch's PR)
 
 Default scope (rule of thumb, unless told otherwise):
   - Only the current sprint (@CurrentIteration) for `query` and `my-active`
@@ -297,6 +298,7 @@ def print_pr_threads(cfg, repo, pr_id, unresolved_only=False):
             continue
         printed += 1
         print(f"--- Thread {thread['id']} (status: {status}) ---")
+        print(f"  Link: {pr_web_url(cfg, repo, pr_id)}?discussionId={thread['id']}")
         for c in comments:
             author = c.get("author", {}).get("displayName", "unknown")
             print(f"  {author}: {c.get('content', '').strip()}")
@@ -359,6 +361,44 @@ def cmd_here(cfg, args):
     print_pr_threads(cfg, pr["repository"]["name"], pr["pullRequestId"], unresolved_only=True)
 
 
+def pr_web_url(cfg, repo, pr_id):
+    org = urllib.parse.quote(cfg["org"])
+    project = urllib.parse.quote(cfg["project"])
+    repo_q = urllib.parse.quote(repo)
+    return f"https://dev.azure.com/{org}/{project}/_git/{repo_q}/pullrequest/{pr_id}"
+
+
+def cmd_open(cfg, args):
+    """Open a PR's web URL in the default browser. If no repo/pr-id is given,
+    detect the current git branch and open the matching open/draft PR."""
+    path = os.getcwd()
+    if "--path" in args:
+        idx = args.index("--path")
+        path = args[idx + 1]
+        args = args[:idx] + args[idx + 2 :]
+
+    positional = [a for a in args if not a.startswith("--")]
+
+    if len(positional) >= 2:
+        repo, pr_id = positional[0], positional[1]
+    else:
+        branch = detect_git_branch(path)
+        if not branch or branch == "HEAD":
+            sys.exit(f"error: could not determine a git branch in {path}")
+        pr = find_pr_for_branch(cfg, branch)
+        if not pr:
+            print(f"No open/draft PR found with source branch '{branch}'.")
+            return
+        repo, pr_id = pr["repository"]["name"], pr["pullRequestId"]
+
+    url = pr_web_url(cfg, repo, pr_id)
+    print(url)
+    try:
+        subprocess.run(["xdg-open", url], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        print(f"(could not launch browser automatically: {e})")
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__)
@@ -376,6 +416,7 @@ def main():
         "pr": cmd_pr,
         "pr-comments": cmd_pr_comments,
         "here": cmd_here,
+        "open": cmd_open,
     }
 
     handler = commands.get(cmd)
