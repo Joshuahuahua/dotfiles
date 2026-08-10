@@ -50,3 +50,6 @@
 
 ## Remembered items
 - User prefers minimal follow-up questions: only ask when genuinely necessary, not by default. For dotfiles/skill/config changes, always commit proactively without asking first; if a change needs adjusting afterward, amend/modify the existing commit rather than asking permission first. _(saved 2026-08-05)_
+
+## Remembered items
+- When printing standup dockets (or similar devops-printer prints), default to a real print (no --preview) unless the user explicitly says to preview or not print. _(saved 2026-08-06)_
