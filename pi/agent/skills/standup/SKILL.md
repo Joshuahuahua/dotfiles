@@ -55,7 +55,7 @@ Read the `dump` output and compose a natural-English description with four
 sections, in this exact structure:
 
 ```
-YESTERDAY
+YESTERDAY (<day name, e.g. Friday>)
 - <dot point, rewritten to read naturally, e.g. "Add X" -> "Added X">
 - <ticket-referencing entries can stay closer to their original text>
 
@@ -70,7 +70,10 @@ BLOCKED
 - <dot point>
 ```
 
-- YESTERDAY, ACTIVE PRS, and BLOCKED are plain dot points (`- `).
+- YESTERDAY, ACTIVE PRS, and BLOCKED are plain dot points (`- `). The
+  YESTERDAY heading includes the actual day name in brackets, taken from the
+  `dump` output's "YESTERDAY (<day>)" header (e.g. `YESTERDAY (Friday)` on a
+  Monday, `YESTERDAY (Tuesday)` on a Wednesday).
 - TODAY is a checklist (`[ ] `) and should contain: today's already-tracked
   Toggl entries (from the dump's "TODAY: Toggl entries already tracked
   today" group — tidied/rephrased naturally, but keep them in
@@ -101,7 +104,7 @@ BLOCKED
 
 ```bash
 python3 standup.py print --preview --detailed <<'EOF'
-YESTERDAY
+YESTERDAY (Friday)
 - ...
 
 TODAY

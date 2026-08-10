@@ -56,6 +56,15 @@ def tidy_whitespace(text):
     return re.sub(r"\s+", " ", text.strip())
 
 
+def get_yesterday_label():
+    """Weekday name for whichever day get_yesterday_entries() covers (e.g.
+    "Friday" on a Monday, otherwise the actual previous day)."""
+    today = date.today()
+    days_back = 3 if today.weekday() == 0 else 1  # Monday -> back to Friday
+    day = today - timedelta(days=days_back)
+    return day.strftime("%A")
+
+
 def get_yesterday_entries():
     """Raw (deduplicated) Toggl entry descriptions for yesterday, with only
     whitespace tidied up -- no rewriting. If today is Monday, "yesterday"
@@ -251,6 +260,7 @@ def cmd_dump(args):
     """Print raw data for all three sections, for the AI to read and turn
     into a naturally-worded description before calling `print`."""
     yesterday = get_yesterday_entries()
+    yesterday_label = get_yesterday_label()
     today_entries = get_today_entries()
     active_tickets = get_active_tickets_today()
     my_prs = get_my_open_prs()
@@ -261,7 +271,7 @@ def cmd_dump(args):
     reviewer_attention = get_reviewer_prs_needing_attention(all_active_prs)
     blocked = get_blocked_tickets()
 
-    print("=== YESTERDAY (raw Toggl entry descriptions) ===")
+    print(f"=== YESTERDAY ({yesterday_label}) (raw Toggl entry descriptions) ===")
     if yesterday:
         for e in yesterday:
             print(f"- {e}")
