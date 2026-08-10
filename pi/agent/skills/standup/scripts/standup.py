@@ -17,8 +17,9 @@ Reuses the sibling azure-devops and toggl-track skill scripts directly
 
 Usage:
   standup.py dump
-  standup.py print [--preview] [--detailed] [--title TITLE] [--heading HEADING]
-                    (reads description text from stdin)
+  standup.py print [--preview] [--detailed] [--heading HEADING]
+                    (reads description text from stdin; no separate title,
+                    just the heading and the current date as the title text)
 
 --preview forwards straight through to the devops-printer `note` command
 (prints to stdout instead of the physical printer). Always use this while
@@ -57,9 +58,26 @@ def tidy_whitespace(text):
 
 def get_yesterday_entries():
     """Raw (deduplicated) Toggl entry descriptions for yesterday, with only
-    whitespace tidied up -- no rewriting."""
+    whitespace tidied up -- no rewriting. If today is Monday, "yesterday"
+    means last Friday instead."""
     cfg = toggl.get_config()
-    day = date.today() - timedelta(days=1)
+    today = date.today()
+    days_back = 3 if today.weekday() == 0 else 1  # Monday -> back to Friday
+    day = today - timedelta(days=days_back)
+    entries = toggl.get_entries_for_range(cfg, day, day + timedelta(days=1))
+    seen = []
+    for e in sorted(entries, key=lambda x: x.get("start", "")):
+        desc = tidy_whitespace(e.get("description") or "(no description)")
+        if desc not in seen:
+            seen.append(desc)
+    return seen
+
+
+def get_today_entries():
+    """Raw (deduplicated) Toggl entry descriptions already tracked today so
+    far, with only whitespace tidied up -- no rewriting."""
+    cfg = toggl.get_config()
+    day = date.today()
     entries = toggl.get_entries_for_range(cfg, day, day + timedelta(days=1))
     seen = []
     for e in sorted(entries, key=lambda x: x.get("start", "")):
@@ -233,6 +251,7 @@ def cmd_dump(args):
     """Print raw data for all three sections, for the AI to read and turn
     into a naturally-worded description before calling `print`."""
     yesterday = get_yesterday_entries()
+    today_entries = get_today_entries()
     active_tickets = get_active_tickets_today()
     my_prs = get_my_open_prs()
     needs_response = get_prs_needing_response(my_prs)
@@ -248,6 +267,13 @@ def cmd_dump(args):
             print(f"- {e}")
     else:
         print("(nothing tracked)")
+
+    print("\n=== TODAY: Toggl entries already tracked today ===")
+    if today_entries:
+        for e in today_entries:
+            print(f"- {e}")
+    else:
+        print("(nothing tracked yet)")
 
     print("\n=== TODAY: active tickets this sprint ===")
     if active_tickets:
@@ -307,10 +333,7 @@ def cmd_print(args):
     to the devops-printer `note` command."""
     preview = "--preview" in args
     detailed = "--detailed" in args
-    title = "Standup"
     heading = "STANDUP"
-    if "--title" in args:
-        title = args[args.index("--title") + 1]
     if "--heading" in args:
         heading = args[args.index("--heading") + 1]
 
@@ -327,9 +350,9 @@ def cmd_print(args):
         "--heading",
         heading,
         "--title",
-        title,
-        "--subtitle",
         today_str,
+        "--subtitle",
+        "",
         "--description",
         description,
     ]
