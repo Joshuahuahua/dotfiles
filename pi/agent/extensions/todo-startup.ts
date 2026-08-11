@@ -6,6 +6,13 @@ type TodoItem = {
 	id: number;
 	text: string;
 	status: string;
+	priority?: string;
+};
+
+const PRIORITY_COLOR: Record<string, string> = {
+	high: "error",
+	med: "warning",
+	low: "success",
 };
 
 type TodoData = {
@@ -38,7 +45,8 @@ function renderTodoLines(ctx: ExtensionContext, todos: TodoItem[]): string[] {
 	lines.push(title);
 
 	for (const todo of todos.slice(0, MAX_ITEMS)) {
-		const prefix = ctx.ui.theme?.fg ? ctx.ui.theme.fg("muted", `#${todo.id} `) : `#${todo.id} `;
+		const color = PRIORITY_COLOR[todo.priority ?? "med"] ?? "muted";
+		const prefix = ctx.ui.theme?.fg ? ctx.ui.theme.fg(color, `#${todo.id} `) : `#${todo.id} `;
 		lines.push(`${prefix}${todo.text}`);
 	}
 
