@@ -53,3 +53,6 @@
 
 ## Remembered items
 - When printing standup dockets (or similar devops-printer prints), default to a real print (no --preview) unless the user explicitly says to preview or not print. _(saved 2026-08-06)_
+
+## Remembered items
+- Never ask for permission to commit dotfiles/skill/config changes — always just commit directly and proactively. Only skip committing if the user explicitly says not to. Do not ask "should I commit?" or similar confirmation questions before committing. _(saved 2026-08-10)_
