@@ -6,39 +6,43 @@
       "text": "repoint ~/.zshrc to mint/.zshrc from the dotfiles repo",
       "status": "open",
       "created_at": "2026-07-14T09:31:40Z",
-      "updated_at": "2026-07-14T09:31:40Z",
-      "notes": []
+      "updated_at": "2026-08-11T05:17:47Z",
+      "notes": [],
+      "priority": "low"
     },
     {
       "id": 3,
       "text": "symlink ~/.tmux.conf to mint/.tmux.conf from the dotfiles repo",
       "status": "open",
       "created_at": "2026-07-14T09:31:40Z",
-      "updated_at": "2026-07-14T09:31:40Z",
-      "notes": []
+      "updated_at": "2026-08-11T05:17:47Z",
+      "notes": [],
+      "priority": "low"
     },
     {
       "id": 4,
       "text": "symlink ~/.config/alacritty/alacritty.toml to mint/alacritty.toml from the dotfiles repo",
       "status": "open",
       "created_at": "2026-07-14T09:31:40Z",
-      "updated_at": "2026-07-14T09:31:40Z",
-      "notes": []
+      "updated_at": "2026-08-11T05:17:47Z",
+      "notes": [],
+      "priority": "low"
     },
     {
       "id": 5,
       "text": "symlink ~/.config/lazygit/config.yml to lazygit.yml from the dotfiles repo",
       "status": "open",
       "created_at": "2026-07-14T09:31:41Z",
-      "updated_at": "2026-07-14T09:31:41Z",
-      "notes": []
+      "updated_at": "2026-08-11T05:17:47Z",
+      "notes": [],
+      "priority": "low"
     },
     {
       "id": 6,
       "text": "Continue Azure IaC (Bicep) migration plan decisions",
       "status": "open",
       "created_at": "2026-08-11T05:15:31Z",
-      "updated_at": "2026-08-11T05:16:59Z",
+      "updated_at": "2026-08-11T05:17:47Z",
       "notes": [
         {
           "at": "2026-08-11T05:15:35Z",
