@@ -56,8 +56,33 @@ def status_prefix(status: str) -> str:
     }.get(status, "[-]")
 
 
+PRIORITIES = ("low", "med", "high")
+
+PRIORITY_COLORS = {
+    "high": "\033[31m",  # red
+    "med": "\033[33m",   # yellow
+    "low": "\033[32m",   # green
+}
+COLOR_RESET = "\033[0m"
+
+
+def use_color() -> bool:
+    return sys.stdout.isatty()
+
+
+def colorize(text: str, priority: str) -> str:
+    if not use_color():
+        return text
+    code = PRIORITY_COLORS.get(priority)
+    if not code:
+        return text
+    return f"{code}{text}{COLOR_RESET}"
+
+
 def format_item(item: dict, include_notes: bool = False) -> str:
-    lines = [f"{status_prefix(item['status'])} #{item['id']} {item['text']}"]
+    priority = item.get("priority", "med")
+    header = f"{status_prefix(item['status'])} #{item['id']} {item['text']} ({priority})"
+    lines = [colorize(header, priority)]
     lines.append(f"    created: {item['created_at']}")
     lines.append(f"    updated: {item['updated_at']}")
     if include_notes and item.get("notes"):
@@ -77,7 +102,11 @@ def cmd_list(args: argparse.Namespace) -> int:
     else:
         items = [item for item in items if item["status"] == status]
 
-    items = sorted(items, key=lambda item: item["id"])
+    priority_rank = {"high": 0, "med": 1, "low": 2}
+    items = sorted(
+        items,
+        key=lambda item: (priority_rank.get(item.get("priority", "med"), 1), item["id"]),
+    )
 
     if not items:
         if args.all and not args.status:
@@ -102,6 +131,7 @@ def cmd_add(args: argparse.Namespace) -> int:
         "id": data["next_id"],
         "text": text,
         "status": "open",
+        "priority": args.priority,
         "created_at": timestamp,
         "updated_at": timestamp,
         "notes": [],
@@ -109,7 +139,7 @@ def cmd_add(args: argparse.Namespace) -> int:
     data["next_id"] += 1
     data["items"].append(item)
     save_data(data)
-    print(f"Added todo #{item['id']}: {item['text']}")
+    print(f"Added todo #{item['id']}: {item['text']} (priority: {item['priority']})")
     return 0
 
 
@@ -131,6 +161,16 @@ def cmd_update(args: argparse.Namespace) -> int:
     item["updated_at"] = now_iso()
     save_data(data)
     print(f"Updated todo #{item['id']}: {item['text']}")
+    return 0
+
+
+def cmd_priority(args: argparse.Namespace) -> int:
+    data = load_data()
+    item = get_item(data, args.id)
+    item["priority"] = args.level
+    item["updated_at"] = now_iso()
+    save_data(data)
+    print(f"Set todo #{item['id']} priority to {args.level}")
     return 0
 
 
@@ -213,7 +253,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     add_parser = subparsers.add_parser("add", help="Add a todo item")
     add_parser.add_argument("text", nargs="+", help="Todo text")
+    add_parser.add_argument(
+        "--priority", choices=PRIORITIES, default="med", help="Priority (default: med)"
+    )
     add_parser.set_defaults(func=cmd_add)
+
+    priority_parser = subparsers.add_parser("priority", help="Set a todo item's priority")
+    priority_parser.add_argument("id", type=int, help="Todo id")
+    priority_parser.add_argument("level", choices=PRIORITIES, help="Priority level")
+    priority_parser.set_defaults(func=cmd_priority)
 
     show_parser = subparsers.add_parser("show", help="Show one todo item")
     show_parser.add_argument("id", type=int, help="Todo id")

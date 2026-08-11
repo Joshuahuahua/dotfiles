@@ -1,5 +1,5 @@
 {
-  "next_id": 6,
+  "next_id": 7,
   "items": [
     {
       "id": 2,
@@ -32,6 +32,20 @@
       "created_at": "2026-07-14T09:31:41Z",
       "updated_at": "2026-07-14T09:31:41Z",
       "notes": []
+    },
+    {
+      "id": 6,
+      "text": "Continue Azure IaC (Bicep) migration plan decisions",
+      "status": "open",
+      "created_at": "2026-08-11T05:15:31Z",
+      "updated_at": "2026-08-11T05:16:59Z",
+      "notes": [
+        {
+          "at": "2026-08-11T05:15:35Z",
+          "text": "Working through decisions 1-7 (subscription, resource group, infra/ layout, RG inventory, secrets strategy, Front Door key auth timing, CI what-if). Stopped after answering #1 (Azure access/subscription). See pi session 019feaef-a6bd-7c0d-882f-c8fbf043f053 for full discussion/context, reference doc: /home/josh/development/work/huddler/hub/workspace1/docs/azure-iac-migration-plan.md"
+        }
+      ],
+      "priority": "high"
     }
   ]
 }

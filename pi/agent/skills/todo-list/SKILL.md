@@ -28,6 +28,7 @@ Use this skill when the user:
 - Do not remove or mark an item done unless the user asked for that, or clearly confirmed it.
 - If a task seems like it may satisfy an existing todo, finish the work first, then ask whether they want the todo removed, marked done, or updated.
 - Never store secrets or credentials in todo items.
+- Every item has a **priority**: `low`, `med`, or `high` (default `med` if not specified). When listing, output is colour-coded by priority (high=red, med=yellow, low=green) if the terminal supports colour, and items are sorted high → med → low (then by id within each). Ask the user for a priority only if they seem to care about ordering; otherwise `med` is fine as a default.
 
 ## Standard workflow
 
@@ -45,7 +46,19 @@ run:
 cd ~/.pi/agent/skills/todo-list && ./bin/todo.py add "<task>"
 ```
 
+Optionally set a priority at creation time (defaults to `med`):
+
+```bash
+cd ~/.pi/agent/skills/todo-list && ./bin/todo.py add "<task>" --priority high
+```
+
 Then briefly confirm the new item.
+
+### Set/change priority
+
+```bash
+cd ~/.pi/agent/skills/todo-list && ./bin/todo.py priority <id> <low|med|high>
+```
 
 ### Show current todos
 
