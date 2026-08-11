@@ -15,6 +15,12 @@ const PRIORITY_COLOR: Record<string, string> = {
 	low: "success",
 };
 
+const PRIORITY_RANK: Record<string, number> = {
+	high: 0,
+	med: 1,
+	low: 2,
+};
+
 type TodoData = {
 	next_id: number;
 	items: TodoItem[];
@@ -33,7 +39,10 @@ function readOpenTodos(): TodoItem[] {
 		return items
 			.filter((item): item is TodoItem => Boolean(item && typeof item.id === "number" && typeof item.text === "string"))
 			.filter((item) => item.status === "open")
-			.sort((a, b) => a.id - b.id);
+			.sort((a, b) => {
+				const rankDiff = (PRIORITY_RANK[a.priority ?? "med"] ?? 1) - (PRIORITY_RANK[b.priority ?? "med"] ?? 1);
+				return rankDiff !== 0 ? rankDiff : a.id - b.id;
+			});
 	} catch {
 		return [];
 	}
