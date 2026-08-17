@@ -56,3 +56,6 @@
 
 ## Remembered items
 - Never ask for permission to commit dotfiles/skill/config changes — always just commit directly and proactively. Only skip committing if the user explicitly says not to. Do not ask "should I commit?" or similar confirmation questions before committing. _(saved 2026-08-10)_
+
+## Remembered items
+- User dislikes the word "punt" (e.g. for deferring work) — avoid using it; say "defer" or "mark as future work" instead. _(saved 2026-08-17)_
