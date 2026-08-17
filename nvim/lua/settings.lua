@@ -79,6 +79,7 @@ require("nvim-treesitter.configs").setup({
 
 -- LSP
 local servers = {
+  bicep = {},
   pyright = {},
   rust_analyzer = {},
   ts_ls = {},
@@ -226,6 +227,7 @@ require("conform").setup({
     python = { "isort", "black" },
     scss = { "prettier" },
     css = { "prettier" },
+    bicep = { "bicep" },
   },
 })
 
