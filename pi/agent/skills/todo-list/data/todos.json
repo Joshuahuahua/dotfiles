@@ -42,11 +42,47 @@
       "text": "Continue Azure IaC (Bicep) migration plan decisions",
       "status": "open",
       "created_at": "2026-08-11T05:15:31Z",
-      "updated_at": "2026-08-11T05:17:47Z",
+      "updated_at": "2026-08-17T03:42:00Z",
       "notes": [
         {
           "at": "2026-08-11T05:15:35Z",
           "text": "Working through decisions 1-7 (subscription, resource group, infra/ layout, RG inventory, secrets strategy, Front Door key auth timing, CI what-if). Stopped after answering #1 (Azure access/subscription). See pi session 019feaef-a6bd-7c0d-882f-c8fbf043f053 for full discussion/context, reference doc: /home/josh/development/work/huddler/hub/workspace1/docs/azure-iac-migration-plan.md"
+        },
+        {
+          "at": "2026-08-17T02:49:58Z",
+          "text": "Decision 1 answered: logged into 'MPN - jhollander' sub (2baa338f-00c0-4e5b-a7c4-ad03e419f6fc), tenant diversus.com.au, access confirmed. Trial RG = HuddlerSubscriptionManager (same sub) containing Function App, Storage, App Insights, Logic Apps, connections, etc. The Front Door itself (HuddlerSubscriptionManagerFrontDoor) lives on 'MPN - devops' sub (7d24c48d-a68e-46b7-9802-ff9d41879d14) inside DWP-PROD RG, which is a SHARED RG with many unrelated resources (other apps' storage/service plans/sites) - so DWP-PROD can't be decompiled wholesale, only the specific Front Door resource. Both subs already available via az account list, no extra login needed."
+        },
+        {
+          "at": "2026-08-17T02:56:14Z",
+          "text": "Decision 2 answered: template scope = ALL resources from HuddlerSubscriptionManager RG (sub 2baa338f-00c0-4e5b-a7c4-ad03e419f6fc) + ONLY the Front Door resource (HuddlerSubscriptionManagerFrontDoor) from DWP-PROD RG (sub 7d24c48d-a68e-46b7-9802-ff9d41879d14) - combined into a SINGLE Bicep template deployable to a single resource group (cross-subscription source, single-RG target). Trial deploy target = 'Huddler-Staging' RG on sub 75f130b6-33d3-4c6a-b2a1-6d8c066df3b5 (MPN - dtang), confirmed empty/clean. Note: this needed a fresh access grant mid-session before az could see the dtang subscription."
+        },
+        {
+          "at": "2026-08-17T03:02:20Z",
+          "text": "Decision 3 answered: Bicep lives at Apps/SubscriptionAndTelemetry/infra/ (an empty infra/ folder already exists there alongside the SubscriptionManager app code) - not a top-level repo infra/ dir. Since it's one combined template, expect a flat-ish layout under that infra/ dir (main.bicep + modules/*.bicep), not per-resource-group folders."
+        },
+        {
+          "at": "2026-08-17T03:03:22Z",
+          "text": "Decision 4 answered: scope is final - HuddlerSubscriptionManager RG + the one Front Door resource is the entire migration target for now. No other resource groups (SharePoint hosting etc.) planned/needed."
+        },
+        {
+          "at": "2026-08-17T03:05:15Z",
+          "text": "Decision 5 answered: secrets strategy = @secure() params (not Key Vault). Investigated actual resources first: currently NO real secrets exist to protect - Function App uses managed identity end-to-end for storage (AzureWebJobsStorage__credential/__clientId, no connection string), App Insights connection string isn't sensitive, and the 4 Logic App API connections (sharepointonline x2, azuretables x2) are OAuth-based tied to joshua.hollander@diversus.com.au (not a static key - needs manual re-auth click in Portal after any deploy regardless of secrets strategy). Policy going forward: use @secure() params for anything that does need a secret later (e.g. future Front Door function key from decision 6)."
+        },
+        {
+          "at": "2026-08-17T03:10:53Z",
+          "text": "Decision 6: CORRECTION - the Front Door function-key auth step is ALREADY DONE (I was wrong that it wasn't set up; plan doc was stale). Verified live: route 'default-route' (pattern /*) on endpoint 'subscription-cache' has rule set 'SubscriptionManagerRules' attached, containing rule 'AddFunctionKeyForSubscriptionManager' (UrlPath BeginsWith /api/getSubscriptionData -> Append header x-functions-key with a live key value). Nothing to do manually - just capture this rule set/rule/header-action in the Bicep when templating Front Door, with the key value as a @secure() param per decision 5."
+        },
+        {
+          "at": "2026-08-17T03:16:22Z",
+          "text": "Decision 7 answered: CI what-if on PRs is deferred to future work, to be revisited at the end once the Bicep template itself exists and is proven out. Not needed for the initial migration.\n\nALL 7 DECISIONS NOW RESOLVED - ready to start actual Bicep work:\n1. Subscription/access: logged into MPN - jhollander (2baa338f-00c0-4e5b-a7c4-ad03e419f6fc), tenant diversus.com.au. Front Door lives on MPN - devops (7d24c48d-a68e-46b7-9802-ff9d41879d14) in shared DWP-PROD RG. Trial deploy target: MPN - dtang sub (75f130b6-33d3-4c6a-b2a1-6d8c066df3b5), RG Huddler-Staging (empty).\n2. Scope: ALL resources in HuddlerSubscriptionManager RG + ONLY the Front Door resource (HuddlerSubscriptionManagerFrontDoor) from DWP-PROD, combined into a SINGLE Bicep template deployable to one RG.\n3. Layout: Apps/SubscriptionAndTelemetry/infra/ (empty folder already exists there next to the SubscriptionManager app code) - flat-ish (main.bicep + modules/*.bicep), not per-RG folders.\n4. Inventory: final - no other resource groups planned beyond the above.\n5. Secrets: @secure() params (not Key Vault) - currently no real secrets exist (Function App uses managed identity throughout; Logic App connections are OAuth-based tied to personal login, need manual re-auth regardless).\n6. Front Door function-key rule: ALREADY CONFIGURED live (rule set SubscriptionManagerRules, rule AddFunctionKeyForSubscriptionManager, appends x-functions-key header on /api/getSubscriptionData) - just needs capturing in Bicep with key as @secure() param.\n7. CI what-if on PRs: deferred to future work, to revisit at the end once Bicep exists.\n\nNext step: begin the actual export/decompile workflow from the plan doc (docs/azure-iac-migration-plan.md) against HuddlerSubscriptionManager RG, plus separately exporting the Front Door resource from DWP-PROD, then hand-merge into Apps/SubscriptionAndTelemetry/infra/."
+        },
+        {
+          "at": "2026-08-17T03:29:39Z",
+          "text": "Progress: raw Bicep exports generated and committed (workspace1, branch task/20603-CreateBicepTemplateForSubscriptionManager, commit be18b2e3, not pushed). Apps/SubscriptionAndTelemetry/infra/main.raw.bicep (from HuddlerSubscriptionManager RG) and frontdoor.raw.bicep (filtered export via --resource-ids of just the Front Door profile+endpoint+origin group+rule set+route from shared DWP-PROD RG). Note: az group export needs -o tsv or it wraps output as an escaped JSON string. docs/azure-iac-migration-plan.md intentionally left uncommitted (excluded per Josh's request) - remember to handle that file separately later. Also: repo uses commitlint/husky requiring conventional commit format 'type(scope): subject' - plain messages get rejected silently (exit 1, no commit made) unless format matches. Next: manual cleanup pass - merge main.raw.bicep + frontdoor.raw.bicep into one template, extract params, split into modules, fix dependsOn, make Front Door key a @secure() param."
+        },
+        {
+          "at": "2026-08-17T03:42:00Z",
+          "text": "Changed approach: instead of a separate log file, we're extending docs/azure-iac-migration-plan.md itself with 'Pre-work decisions (resolved)' and 'Progress log' sections, and committing it incrementally as we go (commit c5475ad0, 'docs(subscription): add pre-work decisions and progress log to Azure IaC migration plan', not pushed). This doc is now tracked/committed going forward (no longer excluded)."
         }
       ],
       "priority": "high"
