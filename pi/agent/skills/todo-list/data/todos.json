@@ -42,7 +42,7 @@
       "text": "Continue Azure IaC (Bicep) migration plan decisions",
       "status": "open",
       "created_at": "2026-08-11T05:15:31Z",
-      "updated_at": "2026-08-17T03:42:00Z",
+      "updated_at": "2026-08-18T01:44:52Z",
       "notes": [
         {
           "at": "2026-08-11T05:15:35Z",
@@ -83,6 +83,18 @@
         {
           "at": "2026-08-17T03:42:00Z",
           "text": "Changed approach: instead of a separate log file, we're extending docs/azure-iac-migration-plan.md itself with 'Pre-work decisions (resolved)' and 'Progress log' sections, and committing it incrementally as we go (commit c5475ad0, 'docs(subscription): add pre-work decisions and progress log to Azure IaC migration plan', not pushed). This doc is now tracked/committed going forward (no longer excluded)."
+        },
+        {
+          "at": "2026-08-17T04:02:20Z",
+          "text": "Big progress: wrote and validated the cleaned-up Bicep template. Apps/SubscriptionAndTelemetry/infra/main.bicep + modules/{storageAccount,appInsights,functionApp,logicApps,monitoring,frontDoor}.bicep. Committed as bf905aeb (not pushed). Key points:\n- Explicit appSettings block added (missing from raw export) - all 8 settings derived from other resources, no secrets.\n- 2 real secrets found and made @secure(): Logic App bypassOriginCheck GUID key, Front Door function key.\n- Front Door origin hostName now references functionApp module's defaultHostName output instead of a hardcoded non-portable string.\n- Front Door module uses module-level scope (resourceGroup(subId, rgName)) parameterized via frontDoorSubscriptionId/frontDoorResourceGroupName - defaults to 'same RG as everything else' (for Huddler-Staging single-RG trial per decision 2), overridable to the real DWP-PROD/devops sub for validation.\n- Dropped noise: stale sites/deployments history, ~30 default ProactiveDetectionConfigs, auto-managed functions/hostNameBindings child resources.\n- Ran az deployment group what-if against real HuddlerSubscriptionManager RG (Front Door scoped to real DWP-PROD). Found + fixed a real gap: storageAccount queueServices/default classic 'logging' block (all disabled, v1.0) was missing from raw export and my first draft - added it back. Remaining diff: benign additive immutableStorageWithVersioning property on 3 containers (present in raw export too, harmless).\n- KNOWN LIMITATION: what-if could not evaluate Logic Apps/connections/server farm/Function App site/Front Door module at all (NestedDeploymentShortCircuited) since they depend on runtime outputs from earlier modules. Real validation of those parts requires an actual deploy, i.e. the Huddler-Staging trial.\nNext: trial-deploy the combined template into Huddler-Staging (dtang sub), confirm it comes up correctly end-to-end."
+        },
+        {
+          "at": "2026-08-17T04:05:48Z",
+          "text": "REMINDER for after the Huddler-Staging trial deploy succeeds: remove/simplify the what-if invocation that specifies frontDoorSubscriptionId/frontDoorResourceGroupName pointing at the real separate DWP-PROD/devops subscription (that override was only for validating against the current split-across-two-RGs reality). Once Huddler-Staging trial proves out, Huddler-Staging becomes the reference single-RG deployment, and that same single-RG deployment approach should then be used to deploy prod too (i.e. stop treating Front Door as living in a separate RG/subscription going forward - collapse to one RG for real deployments, matching decision 2's original intent)."
+        },
+        {
+          "at": "2026-08-18T01:44:52Z",
+          "text": "Blocked/paused on the trial deploy: Microsoft.Cdn provider not registered on MPN - dtang sub (75f130b6-...), and my account got AuthorizationFailed trying to register it there. Decision made (not yet executed): switch the trial to MPN - devops sub (7d24c48d-a68e-46b7-9802-ff9d41879d14) instead, which already has Microsoft.Cdn available (hosts the real prod Front Door). Plan: create a NEW 'Huddler-Staging' RG on that subscription (doesn't exist yet - only DWP-PROD and Huddler-Igloo currently there), and deploy the FULL combined template (storage, function app, logic apps, monitoring, AND a brand new Front Door) into that single RG - not touching the real prod resources. Josh will try to resolve the Cdn provider registration on dtang in parallel, separately. Still to do when resumed: 1) create Huddler-Staging RG on devops sub, 2) run real deploy with storageAccountName override (huddlersubscriptionstg - confirmed globally available), logAnalyticsWorkspaceId/smartDetectionActionGroupId (likely reuse jhollander sub's real ones cross-subscription, same tenant), bypassOriginCheckKey (new value for trial), frontDoorFunctionKey (placeholder first pass, then real key fetched after Function App exists, second pass), 3) after success, per earlier note, simplify main.bicep to drop the cross-RG Front Door scope override and use single-RG shape for real deployments including prod."
         }
       ],
       "priority": "high"
