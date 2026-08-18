@@ -59,3 +59,6 @@
 
 ## Remembered items
 - User dislikes the word "punt" (e.g. for deferring work) — avoid using it; say "defer" or "mark as future work" instead. _(saved 2026-08-17)_
+
+## Remembered items
+- Whenever the user says "let me know" (in any context, not just long-running background tasks), always use the spd-say voice notification (the "say" command) to announce the result/completion, in addition to any text reply. Don't reserve it only for long tasks. _(saved 2026-08-17)_
