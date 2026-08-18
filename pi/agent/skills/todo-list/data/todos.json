@@ -42,7 +42,7 @@
       "text": "Continue Azure IaC (Bicep) migration plan decisions",
       "status": "open",
       "created_at": "2026-08-11T05:15:31Z",
-      "updated_at": "2026-08-18T01:44:52Z",
+      "updated_at": "2026-08-18T09:08:22Z",
       "notes": [
         {
           "at": "2026-08-11T05:15:35Z",
@@ -95,6 +95,14 @@
         {
           "at": "2026-08-18T01:44:52Z",
           "text": "Blocked/paused on the trial deploy: Microsoft.Cdn provider not registered on MPN - dtang sub (75f130b6-...), and my account got AuthorizationFailed trying to register it there. Decision made (not yet executed): switch the trial to MPN - devops sub (7d24c48d-a68e-46b7-9802-ff9d41879d14) instead, which already has Microsoft.Cdn available (hosts the real prod Front Door). Plan: create a NEW 'Huddler-Staging' RG on that subscription (doesn't exist yet - only DWP-PROD and Huddler-Igloo currently there), and deploy the FULL combined template (storage, function app, logic apps, monitoring, AND a brand new Front Door) into that single RG - not touching the real prod resources. Josh will try to resolve the Cdn provider registration on dtang in parallel, separately. Still to do when resumed: 1) create Huddler-Staging RG on devops sub, 2) run real deploy with storageAccountName override (huddlersubscriptionstg - confirmed globally available), logAnalyticsWorkspaceId/smartDetectionActionGroupId (likely reuse jhollander sub's real ones cross-subscription, same tenant), bypassOriginCheckKey (new value for trial), frontDoorFunctionKey (placeholder first pass, then real key fetched after Function App exists, second pass), 3) after success, per earlier note, simplify main.bicep to drop the cross-RG Front Door scope override and use single-RG shape for real deployments including prod."
+        },
+        {
+          "at": "2026-08-18T09:05:08Z",
+          "text": "While paused waiting on Microsoft.Cdn/subscription-assignment blocker, did a naming/tags/cleanup pass on the Bicep template (all committed: b6d4755e, 305bb6de, 57997b2f, 2c8ad20d, 44ff584b). Key changes:\n- Dropped the CAF <type>-huddler-<feature> naming idea; went with plain kebab-case names + tags instead (storage account stays lowercase-only, no hyphens).\n- Standard tags on all taggable resources: Practice=Modern Workplace, Product=Huddler, Module=Subscription. huddler-telemetry App Insights component gets Module=Telemetry instead (shared/broader resource).\n- Removed unused SyncSubscriptionTables Logic App + 3 unused API connections (sharepointonline, sharepointonline-1, azuretables) - none were referenced by the remaining UpdateFrontDoorCache Logic App. Kept only azuretables-1 (renamed subscriptions-table-connection).\n- Removed the Failure Anomalies smart detector rule for the shared huddler-telemetry component (kept the one for subscription-manager-insights).\n- All locations now derive from resourceGroup().location consistently (previously mixed w/ hardcoded northcentralus); Front Door profile/endpoint stay hardcoded 'Global' (Azure hard requirement, not a choice).\n- Final resource names all applied to main.bicep param defaults - see plan doc 'Naming convention and tags' section for the full before/after table.\nAlso: Josh discovered the dtang subscription was the WRONG one - staging and prod RGs are getting NEW subscriptions assigned. So the Huddler-Staging trial (and the whole subscription-pivot-to-devops plan) is on hold until that's sorted, in addition to the Microsoft.Cdn provider registration issue."
+        },
+        {
+          "at": "2026-08-18T09:08:22Z",
+          "text": "Microsoft.Cdn blocker RESOLVED: registered on MPN - dtang sub (75f130b6-...) - a CDN was provisioned there to trigger it. Huddler-Staging and Huddler-Prod RGs both already exist there (australiaeast), both empty. All other required providers confirmed still registered. STAYING ON DTANG (the earlier 'wrong subscription'/devops-pivot plan is no longer needed). Committed as a5c2e996. Ready next session: attempt real trial deploy into Huddler-Staging on dtang, Front Door collapsed into same single RG (no scope override needed). Still need to sort before deploying: logAnalyticsWorkspaceId/smartDetectionActionGroupId for this subscription (fresh, no default workspace/action group exist yet), fresh bypassOriginCheckKey, and placeholder-then-real frontDoorFunctionKey two-pass approach."
         }
       ],
       "priority": "high"
