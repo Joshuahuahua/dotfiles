@@ -79,7 +79,7 @@ require("nvim-treesitter.configs").setup({
 
 -- LSP
 local servers = {
-  bicep = {},
+  bicep = { cmd = { "bicep-lsp" } },
   pyright = {},
   rust_analyzer = {},
   ts_ls = {},
@@ -114,6 +114,7 @@ for server_name, server_settings in pairs(servers) do
     capabilities = capabilities,
     settings = server_settings,
     filetypes = server_settings.filetypes,
+    cmd = server_settings.cmd,
   })
   vim.lsp.enable(server_name)
 end
