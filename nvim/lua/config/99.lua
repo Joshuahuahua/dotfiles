@@ -72,7 +72,7 @@ local _99 = require("99")
 
 _99.setup({
 	provider = PiProvider,
-	tmp_dir = "./tmp",
+	tmp_dir = vim.fn.stdpath("cache") .. "/99",
 	md_files = {
 		"AGENT.md",
 		"AGENTS.md",
