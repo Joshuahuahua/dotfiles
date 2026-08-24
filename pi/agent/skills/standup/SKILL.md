@@ -99,6 +99,12 @@ BLOCKED
   the `dump` output's "ACTIVE PRS" group) — just for visibility, no checkbox
   since there's no action required today.
 - Don't invent information — only rephrase what `dump` returned.
+- If a single PR has many unresolved comment threads (roughly more than
+  2-3), don't list a separate `[ ]` line per thread — this reliably blows
+  past the printer's line budget and gets silently truncated. Instead,
+  group them into one line per reviewer, e.g. "Reply to Alex on PR #3896:
+  6 comments (naming, types, cleanup)", naming a few short topic keywords
+  rather than every individual comment.
 
 ### Step 3: print it
 
@@ -140,6 +146,8 @@ EOF
   here.
 - The printer's receipt has a line budget (12 lines in short mode, 28 in
   `--detailed`); long lists can still get truncated with `...` — keep the
-  rewritten wording reasonably concise.
+  rewritten wording reasonably concise. Always run `--preview` first and
+  check for a trailing `...` before doing the real print; if truncated,
+  condense (see the PR-reply grouping note above) and preview again.
 - If asked to "print my standup" for real, run `print` without `--preview`
   after composing the text; if unsure, preview first.
