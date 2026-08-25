@@ -171,7 +171,7 @@ def get_prs_needing_response(prs):
                     "pr_title": pr["title"],
                     "thread_id": thread["id"],
                     "last_author": last_author,
-                    "comment_preview": first_comment[:200],
+                    "comment_preview": first_comment[:400],
                 }
             )
     return needing_response
@@ -239,7 +239,7 @@ def get_reviewer_prs_needing_attention(all_prs):
                 {
                     "thread_id": thread["id"],
                     "last_author": last_author,
-                    "comment_preview": first_comment[:200],
+                    "comment_preview": first_comment[:400],
                 }
             )
 
