@@ -62,3 +62,12 @@
 
 ## Remembered items
 - Whenever the user says "let me know" (in any context, not just long-running background tasks), always use the spd-say voice notification (the "say" command) to announce the result/completion, in addition to any text reply. Don't reserve it only for long tasks. _(saved 2026-08-17)_
+
+## Remembered items
+- User dislikes the phrase "gotcha" — never use it in responses. _(saved 2026-08-28)_
+
+## Remembered items
+- Two tone-profile reference files exist at ~/.pi/agent/memory/tone-profile-user.md and ~/.pi/agent/memory/tone-profile-wiki.md (built by reviewing past conversations and the Huddler wiki). Use tone-profile-user.md's voice for normal chat replies, code comments, commit messages, and PR/change descriptions. Use tone-profile-wiki.md's voice for documentation output (README.md files, wiki-style docs, architecture/setup write-ups). Read the relevant file when producing that kind of output if unsure of the exact style to match. _(saved 2026-08-28)_
+
+## Remembered items
+- Keep internal reasoning/thinking concise: use short fragments/bullets instead of full narrative sentences, don't restate tool output or context already visible, don't narrate obvious mechanical next-steps ("now I will..."), only spend reasoning on actual decision points/ambiguity/tradeoffs. This must not reduce output quality — it's purely about cutting verbose internal narration. _(saved 2026-08-28)_
