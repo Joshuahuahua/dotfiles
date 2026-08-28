@@ -218,6 +218,8 @@ cmp.setup.cmdline(":", {
 
 -- Formatting
 require("conform").setup({
+  log_level = vim.log.levels.DEBUG,
+
   formatters_by_ft = {
     lua = { "stylua" },
     javascript = { "prettier" },
@@ -228,6 +230,7 @@ require("conform").setup({
     python = { "isort", "black" },
     scss = { "prettier" },
     css = { "prettier" },
+    yaml = { "prettier" },
     bicep = { "bicep" },
   },
 })

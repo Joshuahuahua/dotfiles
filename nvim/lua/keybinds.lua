@@ -88,7 +88,7 @@ set("n", "<leader>ca", function()
 end)
 
 set("n", "<leader>f", function()
-  require("conform").format { async = true, lsp_fallback = true }
+  require("conform").format({ async = true, lsp_fallback = false })
 end)
 
 set("n", "<leader>ff", function()
