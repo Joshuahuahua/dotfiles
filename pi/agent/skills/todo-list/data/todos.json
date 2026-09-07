@@ -1,5 +1,5 @@
 {
-  "next_id": 7,
+  "next_id": 8,
   "items": [
     {
       "id": 2,
@@ -40,9 +40,9 @@
     {
       "id": 6,
       "text": "Continue Azure IaC (Bicep) migration plan decisions",
-      "status": "open",
+      "status": "done",
       "created_at": "2026-08-11T05:15:31Z",
-      "updated_at": "2026-08-18T09:08:22Z",
+      "updated_at": "2026-09-04T02:11:54Z",
       "notes": [
         {
           "at": "2026-08-11T05:15:35Z",
@@ -106,6 +106,32 @@
         }
       ],
       "priority": "high"
+    },
+    {
+      "id": 7,
+      "text": "Check if Ubuntu kernel Bluetooth regression is fixed, then re-run GRUB default to latest kernel",
+      "status": "open",
+      "priority": "med",
+      "created_at": "2026-09-07T02:17:09Z",
+      "updated_at": "2026-09-07T02:43:04Z",
+      "notes": [
+        {
+          "at": "2026-09-07T02:17:17Z",
+          "text": "Bug: MediaTek MT7922 Bluetooth NULL pointer deref (btmtk_usb_hci_wmt_sync / btmtk_setup_firmware_79xx / __pm_runtime_resume) in kernel 6.8.0-139-generic on Ubuntu/Mint noble base. Regression from 6.8.0-138 (good). Laptop: ASUS Vivobook K6602ZC. Tracked upstream at Launchpad bug #2166561 (https://bugs.launchpad.net/bugs/2166561), status New as of 2026-09-07, plus duplicates #2166487/#2166497/#2166509/#2166544/#2166569/#2166577 - none fixed yet. Currently pinned GRUB_DEFAULT to boot 6.8.0-138-generic (via /etc/default/grub, saved advanced-options submenu entry) as a workaround. When check apt (apt list --upgradable | grep linux-image) shows a kernel newer than 6.8.0-139 available AND Launchpad bug 2166561 status is Fix Released, update system, then reset /etc/default/grub GRUB_DEFAULT back to 0 (or remove pin) and run 'sudo update-grub' to resume booting the latest kernel."
+        },
+        {
+          "at": "2026-09-07T02:21:21Z",
+          "text": "STATUS UPDATE 2026-09-07: GRUB has been pinned to boot 6.8.0-138-generic by default (workaround applied and confirmed working - Bluetooth fully functional, headphones reconnected). Change made via: sudo sed -i on /etc/default/grub setting GRUB_DEFAULT=\"gnulinux-advanced-3d825b06-2dc5-4f9e-86a8-c4e9d8e181d7>gnulinux-6.8.0-138-generic-advanced-3d825b06-2dc5-4f9e-86a8-c4e9d8e181d7\" then 'sudo update-grub'. Backup of original config at /etc/default/grub.bak (had GRUB_DEFAULT=0). Confirmed applied: 'sudo grep -n default= /boot/grub/grub.cfg' shows 'set default=\"gnulinux-advanced-...>gnulinux-6.8.0-138-generic-advanced-...\"' on line 29. TO REVERT once fixed: edit /etc/default/grub, set GRUB_DEFAULT=0 (or restore from grub.bak), then run 'sudo update-grub' again. Check fix status via: apt list --upgradable | grep linux-image (look for kernel newer than 6.8.0-139), and check https://bugs.launchpad.net/bugs/2166561 for status change from 'New' to 'Fix Released'."
+        },
+        {
+          "at": "2026-09-07T02:42:31Z",
+          "text": "STATUS UPDATE 2 (2026-09-07): Abandoned the GRUB_DEFAULT approach - it didn't reliably take effect on reboot (booted 6.8.0-139 again despite grub.cfg showing the correct default entry, cause not fully diagnosed - possibly recordfail/hidden-timeout interaction). Instead used Update Manager's Linux Kernels GUI to fully UNINSTALL linux-image-6.8.0-139-generic (+ its modules/modules-extra) while booted into 6.8.0-138-generic. Confirmed via dpkg -l and /boot/vmlinuz-* listing that 139 is gone and 138 is now the newest installed kernel; bluetoothctl/hciconfig confirm Bluetooth fully working. This means GRUB now naturally boots 138 without needing any default-entry override (simpler and more robust). Also checked: Update Manager's other kernel series options (6.11, 6.14, 6.17) are marked 'end of life' (no security updates) so were NOT used; 7.0 is supported/'superseded' like 6.8 but was not tried since 6.8.0-138 already works. REMAINING TODO: still periodically check apt list --upgradable | grep linux-image for a new kernel >6.8.0-139, and check https://bugs.launchpad.net/bugs/2166561 for status change to Fix Released. Once a fixed kernel is available and installed via Update Manager, no GRUB changes are needed (nothing to revert) - just let the new kernel become the default naturally, then optionally remove 6.8.0-138 once confirmed fixed. NOTE: /etc/default/grub still has the leftover GRUB_DEFAULT override pointing at the now-removed 6.8.0-138-generic advanced entry - this should be reset to GRUB_DEFAULT=0 (or restore /etc/default/grub.bak) + sudo update-grub at some point to clean up, though it's currently harmless since 138 is the only/newest kernel anyway."
+        },
+        {
+          "at": "2026-09-07T02:43:04Z",
+          "text": "STATUS UPDATE 3 (2026-09-07): Reset /etc/default/grub GRUB_DEFAULT back to 0 (normal 'boot newest kernel' behavior) + sudo update-grub, since it's no longer needed now that 6.8.0-139 is fully uninstalled. Confirmed grub.cfg regenerated cleanly with 6.8.0-138-generic as the newest available kernel. System is now in a clean, simple state: no custom GRUB overrides, just naturally boots 138. Nothing further needed until a fixed kernel appears - just check apt/Launchpad bug 2166561 periodically per earlier notes."
+        }
+      ]
     }
   ]
 }
