@@ -43,7 +43,30 @@ any combination:
    factor rather than the sole cause. Not proven persistent/root-cause — an
    optional extra step, not the main fix.
 
-## The fix — do these steps directly when asked to "fix" the keyboard
+## The fix — use the script
+
+A companion script does the mechanical steps: `fix.sh` (in this skill's
+directory). Run it directly when Josh asks to "fix" the keyboard:
+
+```bash
+~/.pi/agent/skills/keychron-bluetooth-fix/fix.sh
+```
+
+It will: unblock/power the adapter if needed, remove any stale pairing,
+prompt Josh to put the keyboard into pairing mode, scan, then pair/trust/
+connect. If it fails to find the keyboard during scan, it exits with an
+error — ask Josh to double check pairing mode and rerun.
+
+If the plain run doesn't fix it, try the ERTM variant (needs Josh's sudo
+password interactively, so run it in a way he can respond to the prompt):
+
+```bash
+~/.pi/agent/skills/keychron-bluetooth-fix/fix.sh --ertm
+```
+
+### Manual steps (fallback / for reference)
+
+If the script isn't available or you need to do it by hand:
 
 1. Check current state first:
    ```bash
