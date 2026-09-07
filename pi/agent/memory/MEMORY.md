@@ -71,3 +71,6 @@
 
 ## Remembered items
 - Keep internal reasoning/thinking concise: use short fragments/bullets instead of full narrative sentences, don't restate tool output or context already visible, don't narrate obvious mechanical next-steps ("now I will..."), only spend reasoning on actual decision points/ambiguity/tradeoffs. This must not reduce output quality — it's purely about cutting verbose internal narration. _(saved 2026-08-28)_
+
+## Remembered items
+- Josh's Keychron K8 Pro keyboard (MAC 6C:93:08:62:3D:65) on laptop "alfie" occasionally loses Bluetooth pairing/connection (works ~99% of the time). When he asks to "fix the keyboard"/"fix my bluetooth keyboard", use the keychron-bluetooth-fix skill (~/.pi/agent/skills/keychron-bluetooth-fix/SKILL.md): remove old pairing via bluetoothctl, have him put it in pairing mode (Fn+1 ~4s), scan, then pair/trust/connect via bluetoothctl, and have him type immediately after connect (idle-disconnects within ~30-60s otherwise). Likely cause is bonding/encryption key desync (host Bluetooth restart/resume issues), not proven to be L2CAP ERTM despite that being tried once. Just run the fix steps directly, don't over-analyze root cause each time. _(saved 2026-09-07)_
