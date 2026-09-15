@@ -113,7 +113,7 @@
       "status": "open",
       "priority": "med",
       "created_at": "2026-09-07T02:17:09Z",
-      "updated_at": "2026-09-07T02:43:04Z",
+      "updated_at": "2026-09-07T07:25:40Z",
       "notes": [
         {
           "at": "2026-09-07T02:17:17Z",
@@ -130,6 +130,10 @@
         {
           "at": "2026-09-07T02:43:04Z",
           "text": "STATUS UPDATE 3 (2026-09-07): Reset /etc/default/grub GRUB_DEFAULT back to 0 (normal 'boot newest kernel' behavior) + sudo update-grub, since it's no longer needed now that 6.8.0-139 is fully uninstalled. Confirmed grub.cfg regenerated cleanly with 6.8.0-138-generic as the newest available kernel. System is now in a clean, simple state: no custom GRUB overrides, just naturally boots 138. Nothing further needed until a fixed kernel appears - just check apt/Launchpad bug 2166561 periodically per earlier notes."
+        },
+        {
+          "at": "2026-09-07T07:25:40Z",
+          "text": "STATUS UPDATE 4 (2026-09-07): Discovered why 139 came back after the first removal - the linux-generic/linux-image-generic/linux-headers-generic META-PACKAGES were still installed and always track 'latest available' (139 was still the only candidate in the repo, no 138-targeting meta version exists anymore in noble-updates). Some automatic update check reinstalled linux-generic (seen in /var/log/apt/history.log as a non-automatic top-level install), which pulled 139 back in as a dependency. FIX: purged 139 + all three generic meta-packages again while booted into 138, AND added a permanent apt pin at /etc/apt/preferences.d/block-kernel-139 (Pin-Priority: -1) covering linux-image-6.8.0-139-generic, its modules/headers/tools, and linux-generic/linux-image-generic/linux-headers-generic - this blocks apt from ever reinstalling any of them again, even via automatic background update checks, until the pin file is removed. Confirmed via apt-cache policy that Candidate now shows '(none)' due to pin. TO REVERT once a real fix ships (check apt list --upgradable | grep linux-image and Launchpad bug 2166561 status): delete /etc/apt/preferences.d/block-kernel-139, then sudo apt install linux-generic (will pull in the new fixed kernel + reinstall the generic meta-packages normally)."
         }
       ]
     }
