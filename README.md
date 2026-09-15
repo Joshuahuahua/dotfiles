@@ -56,11 +56,19 @@ The Mint setup is intended to symlink:
 - `~/.config/lazygit/config.yml` -> `lazygit.yml`
 - `~/.pi/agent/AGENTS.md` -> `pi/agent/AGENTS.md`
 - `~/.pi/agent/settings.json` -> `pi/agent/settings.json`
+- `~/.pi/agent/keybindings.json` -> `pi/agent/keybindings.json`
+- `~/.pi/agent/web-search.json` -> `pi/agent/web-search.json`
 - `~/.pi/agent/extensions` -> `pi/agent/extensions`
+- `~/.pi/agent/skills` -> `pi/agent/skills`
 - `~/.pi/agent/memory/README.md` -> `pi/agent/memory/README.md`
 - `~/.pi/agent/memory/bin` -> `pi/agent/memory/bin`
 - `~/.pi/agent/memory/MEMORY.md` -> `pi/agent/memory/MEMORY.md`
 - `~/.pi/agent/memory/projects` -> `pi/agent/memory/projects`
+
+Each entry above is a real symlink: the path under `~/.pi/agent/` points at the file/directory of
+the same name living in this repo under `pi/agent/`. There is no separate "synced copy" step —
+Pi reads and writes through the symlink, so edits from either side land directly in this repo and
+show up in `git status` here.
 
 Pi runtime/auth files such as `auth.json` and `sessions/` are intentionally left local and are not stored in the repo.
 
