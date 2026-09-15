@@ -86,3 +86,6 @@ fnm default was changed from v22.16.0 to v22.23.1 specifically so fresh shells r
 Pi's actual data/config lives in `~/.pi/agent/` (sessions, summaries, memory, auth.json, models-store.json, npm/ extension deps) — this directory is independent of how the `pi` executable itself is installed and is untouched by reinstalls/migrations between install methods. Config files (`AGENTS.md`, `settings.json`, `keybindings.json`, `extensions/`, `skills/`) are symlinked from `~/.pi/agent/` into the dotfiles repo at `~/development/clones/dotfiles/pi/agent/`. `~/.zshrc` is itself a symlink to `~/development/clones/dotfiles/.zshrc` (fnm setup around line 95-102: `eval "$(fnm env --use-on-cd --shell zsh)"`).
 
 A pre-migration backup of the entire `~/.pi/agent` directory exists at `~/pi-agent-backup-20260909-113025.tar.gz` (22.8MB) in case rollback is ever needed. _(saved 2026-09-09)_
+
+## Remembered items
+- Keep git commit messages short: body should be at most a few short sentences, not long detailed multi-paragraph descriptions. _(saved 2026-09-15)_
