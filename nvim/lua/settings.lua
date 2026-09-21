@@ -44,6 +44,9 @@ o.laststatus = 3
 -- Theme
 vim.cmd.colorscheme("tokyonight-storm")
 
+-- Git Blame (render after search count virtual text, e.g. noice's [x/y] on n/N)
+vim.g.gitblame_set_extmark_options = { priority = 9000 }
+
 
 -- Telescope
 require("telescope").setup({
