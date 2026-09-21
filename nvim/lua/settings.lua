@@ -187,7 +187,15 @@ cmp.setup({
   },
 })
 
-require("noice").setup({})
+require("noice").setup({
+  lsp = {
+    -- fidget.nvim already renders LSP progress; noice doing it too causes
+    -- redraw contention (freezes) while a server is loading/indexing.
+    progress = {
+      enabled = false,
+    },
+  },
+})
 require("lualine").setup({})
 require("cord").setup({
   text = {
