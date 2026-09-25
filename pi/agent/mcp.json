@@ -3,7 +3,10 @@
     "figma": {
       "transport": "streamable-http",
       "url": "https://mcp.figma.com/mcp",
-      "lifecycle": "eager"
+      "lifecycle": "eager",
+      "auth": {
+        "type": "oauth"
+      }
     }
   }
 }
