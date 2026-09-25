@@ -99,6 +99,25 @@ set("n", "gt", function()
   require("tserror").show_diagnostics()
 end)
 
+-- Quickfix
+local q = "<leader>q"
+set("n", q .. "a", function()
+  local filename = vim.fn.expand("%:p")
+  local lnum = vim.fn.line(".")
+  local col = vim.fn.col(".")
+  local text = vim.fn.getline(".")
+
+  vim.fn.setqflist({}, "a", {
+    title = "Quickfix",
+    items = {
+      { filename = filename, lnum = lnum, col = col, text = text },
+    },
+  })
+end, { desc = "Add current file/line to quickfix list" })
+
+set("n", q .. "n", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
+set("n", q .. "p", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
+
 -- Git
 local g = "<leader>g"
 set("n", g .. "s", "<cmd>Telescope git_status<CR>")

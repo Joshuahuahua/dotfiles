@@ -49,6 +49,30 @@ vim.g.gitblame_set_extmark_options = { priority = 9000 }
 
 
 -- Telescope
+local telescope_actions = require("telescope.actions")
+local telescope_action_state = require("telescope.actions.state")
+
+-- Adds the currently highlighted result (not the whole result set) to the
+-- quickfix list, keeping the picker open so you can keep adding more.
+local function send_current_to_qflist(prompt_bufnr)
+  local entry = telescope_action_state.get_selected_entry()
+  if not entry then
+    return
+  end
+
+  local filename = entry.filename or entry.path or entry.value
+  local lnum = entry.lnum or 1
+  local col = (entry.col or 0) + 1
+  local text = entry.text or entry.display or ""
+
+  vim.fn.setqflist({}, "a", {
+    title = "Telescope",
+    items = {
+      { filename = filename, lnum = lnum, col = col, text = text },
+    },
+  })
+end
+
 require("telescope").setup({
   defaults = {
     initial_mode = "normal",
@@ -61,6 +85,11 @@ require("telescope").setup({
       width = 0.9,
       height = 0.9,
       preview_cutoff = 80,
+    },
+    mappings = {
+      n = {
+        ["q"] = send_current_to_qflist,
+      },
     },
   },
   pickers = {
