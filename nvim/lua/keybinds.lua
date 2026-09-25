@@ -41,11 +41,6 @@ set("n", "n", "nzzzv")
 set("n", "N", "Nzzzv")
 
 -- Telescope
-set("n", "<C-p>", function()
-  require("telescope.builtin").find_files({
-    prompt_prefix = "🔍",
-  })
-end)
 set("n", "<C-f>", function()
   require("telescope.builtin").live_grep({
     prompt_prefix = "🔍",
@@ -115,8 +110,24 @@ set("n", q .. "a", function()
   })
 end, { desc = "Add current file/line to quickfix list" })
 
-set("n", q .. "n", "<cmd>cnext<CR>zz", { desc = "Next quickfix item" })
-set("n", q .. "p", "<cmd>cprev<CR>zz", { desc = "Previous quickfix item" })
+-- Next/prev quickfix item. Only takes effect while the quickfix window is
+-- open somewhere (like <C-o>/<C-i> for jumps), otherwise falls through to
+-- whatever <C-n>/<C-p> would normally do (e.g. telescope find_files).
+local function qf_nav(cmd, fallback)
+  return function()
+    if vim.fn.getqflist({ winid = 0 }).winid ~= 0 then
+      vim.cmd(cmd)
+      vim.cmd("normal! zz")
+    elseif fallback then
+      fallback()
+    end
+  end
+end
+
+set("n", "<C-n>", qf_nav("cnext"), { desc = "Next quickfix item" })
+set("n", "<C-p>", qf_nav("cprev", function()
+  require("telescope.builtin").find_files({ prompt_prefix = "🔍" })
+end), { desc = "Previous quickfix item / find files" })
 
 -- Git
 local g = "<leader>g"
