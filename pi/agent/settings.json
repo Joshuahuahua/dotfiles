@@ -6,7 +6,6 @@
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-web-access",
-    "npm:context-mode",
-    "npm:pi-mcp-extension"
+    "npm:context-mode"
   ]
 }
