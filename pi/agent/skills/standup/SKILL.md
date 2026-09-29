@@ -28,8 +28,10 @@ python3 standup.py dump
 
 Prints plain, readable raw data in six groups:
 - Yesterday's Toggl entry descriptions (deduplicated, whitespace-tidied only
-  — no rewriting). If today is Monday, "yesterday" means last Friday
-  instead of Sunday.
+  - no rewriting). If today is Monday, "yesterday" means last Friday
+  instead of Sunday. If that day has nothing tracked, the script keeps
+  walking back one weekday at a time (skipping weekends) until it finds a
+  day with entries, and labels the section with that day's actual name.
 - Today's Toggl entry descriptions already tracked so far today (same
   dedup/whitespace-only treatment) — things Josh has already started/done
   today that should show up in TODAY too, not just planned/pending work.

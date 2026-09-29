@@ -56,23 +56,10 @@ def tidy_whitespace(text):
     return re.sub(r"\s+", " ", text.strip())
 
 
-def get_yesterday_label():
-    """Weekday name for whichever day get_yesterday_entries() covers (e.g.
-    "Friday" on a Monday, otherwise the actual previous day)."""
-    today = date.today()
-    days_back = 3 if today.weekday() == 0 else 1  # Monday -> back to Friday
-    day = today - timedelta(days=days_back)
-    return day.strftime("%A")
+MAX_LOOKBACK_DAYS = 14
 
 
-def get_yesterday_entries():
-    """Raw (deduplicated) Toggl entry descriptions for yesterday, with only
-    whitespace tidied up -- no rewriting. If today is Monday, "yesterday"
-    means last Friday instead."""
-    cfg = toggl.get_config()
-    today = date.today()
-    days_back = 3 if today.weekday() == 0 else 1  # Monday -> back to Friday
-    day = today - timedelta(days=days_back)
+def _entries_for_day(cfg, day):
     entries = toggl.get_entries_for_range(cfg, day, day + timedelta(days=1))
     seen = []
     for e in sorted(entries, key=lambda x: x.get("start", "")):
@@ -80,6 +67,36 @@ def get_yesterday_entries():
         if desc not in seen:
             seen.append(desc)
     return seen
+
+
+def _find_last_tracked_day():
+    """Starting from "yesterday" (last Friday if today is Monday, otherwise
+    the actual previous day), walk backwards -- skipping weekends -- until a
+    day with tracked Toggl entries is found, or MAX_LOOKBACK_DAYS is
+    exhausted. Returns (day, entries); entries is [] if nothing was found at
+    all within the lookback window."""
+    cfg = toggl.get_config()
+    today = date.today()
+    days_back = 3 if today.weekday() == 0 else 1  # Monday -> back to Friday
+    day = today - timedelta(days=days_back)
+    for _ in range(MAX_LOOKBACK_DAYS):
+        entries = _entries_for_day(cfg, day)
+        if entries:
+            return day, entries
+        day -= timedelta(days=1)
+        while day.weekday() >= 5:  # skip weekends
+            day -= timedelta(days=1)
+    return day, []
+
+
+def get_yesterday_label_and_entries():
+    """Weekday name + raw (deduplicated) Toggl entry descriptions for the
+    most recent day with tracked entries, with only whitespace tidied up --
+    no rewriting. Normally "yesterday" (last Friday instead if today is
+    Monday); if that day has nothing tracked, keeps walking back one
+    (weekday) day at a time until it finds a day with entries."""
+    day, entries = _find_last_tracked_day()
+    return day.strftime("%A"), entries
 
 
 def get_today_entries():
@@ -259,8 +276,7 @@ def get_reviewer_prs_needing_attention(all_prs):
 def cmd_dump(args):
     """Print raw data for all three sections, for the AI to read and turn
     into a naturally-worded description before calling `print`."""
-    yesterday = get_yesterday_entries()
-    yesterday_label = get_yesterday_label()
+    yesterday_label, yesterday = get_yesterday_label_and_entries()
     today_entries = get_today_entries()
     active_tickets = get_active_tickets_today()
     my_prs = get_my_open_prs()
