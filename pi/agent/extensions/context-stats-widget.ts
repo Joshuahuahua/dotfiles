@@ -81,7 +81,7 @@ function formatCopilotUsage(data: CopilotInternalUser): string | undefined {
 	if (!quota || quota.unlimited) return undefined;
 	const used = quota.credits_used ?? Math.max(0, quota.entitlement - quota.remaining);
 	const usedPercent = quota.entitlement > 0 ? Math.round((used / quota.entitlement) * 100) : 0;
-	return `Copilot ${used.toLocaleString()}/${quota.entitlement.toLocaleString()} (${usedPercent}%)`;
+	return `Credits: ${used.toLocaleString()}/${quota.entitlement.toLocaleString()} (${usedPercent}%)`;
 }
 
 class StatsBar implements Component {
