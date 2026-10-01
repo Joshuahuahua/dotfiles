@@ -76,19 +76,12 @@ async function fetchPremiumQuota(token: string): Promise<CopilotInternalUser> {
 	return (await response.json()) as CopilotInternalUser;
 }
 
-function formatResetDate(dateStr: string | undefined): string {
-	if (!dateStr) return "";
-	const date = new Date(dateStr);
-	if (Number.isNaN(date.getTime())) return "";
-	return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 function formatCopilotUsage(data: CopilotInternalUser): string | undefined {
 	const quota = data.quota_snapshots?.premium_interactions;
 	if (!quota || quota.unlimited) return undefined;
 	const used = quota.credits_used ?? Math.max(0, quota.entitlement - quota.remaining);
-	const resetLabel = formatResetDate(data.quota_reset_date);
-	return `Copilot ${used.toLocaleString()}/${quota.entitlement.toLocaleString()}${resetLabel ? ` (resets ${resetLabel})` : ""}`;
+	const usedPercent = quota.entitlement > 0 ? Math.round((used / quota.entitlement) * 100) : 0;
+	return `Copilot ${used.toLocaleString()}/${quota.entitlement.toLocaleString()} (${usedPercent}%)`;
 }
 
 class StatsBar implements Component {
