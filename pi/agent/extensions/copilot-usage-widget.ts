@@ -41,14 +41,14 @@ type CopilotInternalUser = {
 	};
 };
 
-async function getGitHubToken(ctx: ExtensionContext): Promise<string | undefined> {
-	try {
-		const result = await ctx.exec("gh", ["auth", "token"], { timeout: 5000 });
-		const token = result.stdout.trim();
-		return token || undefined;
-	} catch {
-		return undefined;
+async function getGitHubToken(pi: ExtensionAPI): Promise<string> {
+	const result = await pi.exec("gh", ["auth", "token"], { timeout: 5000 });
+	const token = result.stdout.trim();
+	if (!token) {
+		const detail = result.stderr.trim() || `exit code ${result.code}`;
+		throw new Error(`gh auth token: ${detail}`);
 	}
+	return token;
 }
 
 async function fetchPremiumQuota(token: string): Promise<CopilotInternalUser> {
@@ -86,17 +86,13 @@ export default function (pi: ExtensionAPI) {
 
 	const refresh = async (ctx: ExtensionContext, options: { notifyOnError?: boolean } = {}) => {
 		if (!ctx.hasUI) return;
-		const token = await getGitHubToken(ctx);
-		if (!token) {
-			if (options.notifyOnError) ctx.ui.notify("Copilot usage: `gh auth token` failed (is GitHub CLI logged in?)", "warning");
-			return;
-		}
 		try {
+			const token = await getGitHubToken(pi);
 			const data = await fetchPremiumQuota(token);
 			const text = formatStatus(ctx, data);
 			ctx.ui.setStatus(STATUS_KEY, text);
 		} catch (error) {
-			if (options.notifyOnError) ctx.ui.notify(`Copilot usage fetch failed: ${String(error)}`, "warning");
+			if (options.notifyOnError) ctx.ui.notify(`Copilot usage: ${error instanceof Error ? error.message : String(error)}`, "warning");
 		}
 	};
 
