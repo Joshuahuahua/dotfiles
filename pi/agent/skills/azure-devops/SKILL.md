@@ -91,6 +91,22 @@ python3 devops.py sprint
 (id, type, state, title, assignee, iteration). `workitem` prints full JSON if
 more detail (description, comments, links) is needed.
 
+### Creating work items (write access)
+
+The PAT now has Work Items (Write) scope, so this is a real, live action
+that creates an actual item in Azure DevOps - always confirm the exact
+type/title/fields with the user first, and route the invocation through
+the `devops-workitem-create` skill (not this script directly) so the
+skill-confirm-gate extension's confirmation dialog gates it.
+
+```bash
+python3 devops.py workitem-create <type> "<title>" \
+  [--description "<text>"] [--assigned-to <email>] \
+  [--iteration "<path>"] [--area "<path>"] [--parent <id>] [--tags "a; b"]
+```
+
+Prints the new item's id and web URL on success.
+
 ### Pull requests
 
 ```bash

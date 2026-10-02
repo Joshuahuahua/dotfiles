@@ -97,11 +97,11 @@ def get_config():
     return {"org": org, "project": project, "me": me, "pat": pat}
 
 
-def request(cfg, method, url, body=None):
+def request(cfg, method, url, body=None, content_type="application/json"):
     token = base64.b64encode(f":{cfg['pat']}".encode()).decode()
     headers = {
         "Authorization": f"Basic {token}",
-        "Content-Type": "application/json",
+        "Content-Type": content_type,
         "Accept": "application/json",
     }
     data = json.dumps(body).encode() if body is not None else None
@@ -128,6 +128,86 @@ def cmd_workitem(cfg, args):
         cfg, f"_apis/wit/workitems/{wi_id}?$expand=all&api-version={API_VERSION}"
     )
     print(json.dumps(request(cfg, "GET", url), indent=2))
+
+
+def cmd_workitem_delete(cfg, args):
+    """Delete a work item.
+
+    Usage: workitem-delete <id> [--destroy]
+
+    Without --destroy, Azure DevOps soft-deletes the item into the project's
+    recycle bin (recoverable). With --destroy, it is permanently destroyed
+    and cannot be recovered.
+    """
+    if not args:
+        sys.exit("usage: workitem-delete <id> [--destroy]")
+
+    wi_id = args[0]
+    destroy = "--destroy" in args
+
+    url = project_url(cfg, f"_apis/wit/workitems/{wi_id}?api-version={API_VERSION}")
+    if destroy:
+        url += "&destroy=true"
+    request(cfg, "DELETE", url)
+    print(f"Deleted #{wi_id}" + (" (permanently destroyed)" if destroy else " (moved to recycle bin)"))
+
+
+def cmd_workitem_create(cfg, args):
+    """Create a work item.
+
+    Usage: workitem-create <type> <title> [--description TEXT]
+           [--assigned-to EMAIL] [--iteration PATH] [--area PATH]
+           [--parent ID] [--tags "a; b"] [--estimate HOURS]
+
+    <type> is a work item type name, e.g. Task, Bug, "User Story".
+    """
+    if len(args) < 2:
+        sys.exit("usage: workitem-create <type> <title> [--description TEXT] "
+                  "[--assigned-to EMAIL] [--iteration PATH] [--area PATH] "
+                  "[--parent ID] [--tags \"a; b\"] [--estimate HOURS]")
+
+    wi_type, title = args[0], args[1]
+    rest = args[2:]
+    opts = {}
+    i = 0
+    while i < len(rest):
+        if rest[i].startswith("--") and i + 1 < len(rest):
+            opts[rest[i][2:]] = rest[i + 1]
+            i += 2
+        else:
+            i += 1
+
+    patch = [{"op": "add", "path": "/fields/System.Title", "value": title}]
+    if "description" in opts:
+        patch.append({"op": "add", "path": "/fields/System.Description", "value": opts["description"]})
+    if "assigned-to" in opts:
+        patch.append({"op": "add", "path": "/fields/System.AssignedTo", "value": opts["assigned-to"]})
+    if "iteration" in opts:
+        patch.append({"op": "add", "path": "/fields/System.IterationPath", "value": opts["iteration"]})
+    if "area" in opts:
+        patch.append({"op": "add", "path": "/fields/System.AreaPath", "value": opts["area"]})
+    if "tags" in opts:
+        patch.append({"op": "add", "path": "/fields/System.Tags", "value": opts["tags"]})
+    if "estimate" in opts:
+        patch.append({"op": "add", "path": "/fields/Microsoft.VSTS.Scheduling.OriginalEstimate", "value": opts["estimate"]})
+    if "parent" in opts:
+        patch.append({
+            "op": "add",
+            "path": "/relations/-",
+            "value": {
+                "rel": "System.LinkTypes.Hierarchy-Reverse",
+                "url": org_url(cfg, f"_apis/wit/workItems/{opts['parent']}"),
+            },
+        })
+
+    type_segment = urllib.parse.quote(f"${wi_type}")
+    url = project_url(cfg, f"_apis/wit/workitems/{type_segment}?api-version={API_VERSION}")
+    result = request(cfg, "POST", url, patch, content_type="application/json-patch+json")
+    wi_id = result.get("id")
+    wi_url = org_url(cfg, f"{cfg['project']}/_workitems/edit/{wi_id}") if wi_id else None
+    print(f"Created #{wi_id} [{wi_type}] {title}")
+    if wi_url:
+        print(wi_url)
 
 
 def run_wiql(cfg, where_clause, top=50):
@@ -423,6 +503,8 @@ def main():
 
     commands = {
         "workitem": cmd_workitem,
+        "workitem-create": cmd_workitem_create,
+        "workitem-delete": cmd_workitem_delete,
         "query": cmd_query,
         "my-active": cmd_my_active,
         "sprint": cmd_sprint,
