@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Placeholder/prototype script. Performs NO real action - does not call
-# Azure DevOps or any API.
+# Creates a REAL Azure DevOps work item. Performs a live write via the
+# azure-devops skill's devops.py (which now has Work Items Write scope).
 #
 # Confirmation is NOT handled here. It's handled by the
 # ~/.pi/agent/extensions/skill-confirm-gate.ts extension, which reads
@@ -10,9 +10,6 @@
 
 set -euo pipefail
 
-type="${1:-Task}"
-title="${2:-Untitled work item}"
+DEVOPS_SCRIPT="$HOME/.pi/agent/skills/azure-devops/scripts/devops.py"
 
-echo "(placeholder) Would create the work item now - no real action taken."
-echo "  Type:  $type"
-echo "  Title: $title"
+python3 "$DEVOPS_SCRIPT" workitem-create "$@"

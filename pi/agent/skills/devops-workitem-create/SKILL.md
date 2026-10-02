@@ -1,59 +1,45 @@
 ---
 name: devops-workitem-create
-description: PLACEHOLDER/PROTOTYPE - demonstrates a confirmation gate for creating Azure DevOps work items, enforced at the engine level via the skill-confirm-gate extension. Does not actually create anything yet. Use only to show the confirmation UX; do not wire this up to the real write API until the user explicitly asks for that.
+description: Creates a real Azure DevOps work item (Task, Bug, User Story, etc.), gated behind a mandatory user confirmation dialog enforced by the skill-confirm-gate extension. Use when the user asks to create/raise/file a devops ticket or work item.
 metadata:
   requires-confirmation: true
 ---
 
-# DevOps Work Item Create (placeholder)
+# DevOps Work Item Create
 
-This skill is a **placeholder**. It exists only to demonstrate what a
-confirm-before-write flow looks like. It does **not** call Azure DevOps and
-cannot create, edit, or delete anything yet - the azure-devops skill's PAT
-is read-only, and this script has no network calls at all.
-
-The `metadata.requires-confirmation: true` field above is read by the
-`~/.pi/agent/extensions/skill-confirm-gate.ts` extension, not by this
-skill's own script. That extension hooks Pi's `tool_call` event and holds
-any bash command that references this skill's directory until the user
-answers a real confirm dialog (`ctx.ui.confirm()`, shown by Pi's own UI). If
-declined, the tool call is blocked with `{ block: true }` before it runs -
-the agent cannot make it proceed by retrying, picking a different script,
-or hand-rolling the command, because the gate sits at the engine's tool
-layer, not inside a script the agent chooses whether to call.
-
-This is stronger than a script popping its own GUI dialog (an earlier
-version of this skill did that with zenity): a script-level dialog only
-gates that one script, and relies on the agent actually choosing to run it
-instead of some other path to the same effect. The extension-level gate
-intercepts the tool call itself, regardless of which script constructed it.
-
-## When to use
-
-Only when the user is testing/demoing the confirmation flow for creating a
-work item. Do not treat this as a real "create ticket" capability.
+This skill creates a **real** Azure DevOps work item using the
+`azure-devops` skill's PAT (which has Work Items Write scope). It is gated
+by `metadata.requires-confirmation: true` above: the
+`~/.pi/agent/extensions/skill-confirm-gate.ts` extension intercepts any
+bash command referencing this skill's directory and holds it for a real
+`ctx.ui.confirm()` dialog before it runs. If the user declines, the tool
+call is blocked and `bin/create.sh` never executes - nothing is created.
 
 ## Workflow
 
-1. Gather the proposed work item fields from context (type, title,
-   description, etc).
-2. Show the user exactly what would be created.
-3. Run the helper script. The skill-confirm-gate extension will intercept
-   the call and show the real confirm dialog before it executes.
+1. Work out the work item's fields from context: type (Task, Bug, User
+   Story, etc.), title, and optionally description, assignee, iteration,
+   area path, parent id, tags.
+2. Tell the user exactly what you're about to create (type, title, and any
+   other fields) before running the command - the confirm dialog only shows
+   the raw bash command, so make sure your chat message is equally clear.
+3. Run the helper script from this skill's directory so the confirm gate's
+   path-matching triggers:
 
 ```bash
-cd ~/.pi/agent/skills/devops-workitem-create && ./bin/create.sh "<type>" "<title>"
+cd ~/.pi/agent/skills/devops-workitem-create && ./bin/create.sh "<type>" "<title>" [--description "<text>"] [--assigned-to <email>] [--iteration "<path>"] [--area "<path>"] [--parent <id>] [--tags "a; b"]
 ```
 
-If the user declines in the dialog, the tool call is blocked and the
-script body never runs - tell the user it was cancelled.
+4. If the user approves in the dialog, the script prints the new item's id
+   and web URL - relay that back to the user. If declined, tell them it was
+   cancelled and nothing was created.
 
 ## Notes
 
-- Real implementation would need: a PAT with Work Items (Write) scope, a
-  `workitem create` command added to the azure-devops skill's
-  `scripts/devops.py`, and `metadata.requires-confirmation: true` added to
-  that command's invoking skill (or a dedicated skill) so the same gate
-  covers it.
-- Do not add write scope or real creation logic to this skill without the
-  user explicitly asking for it.
+- This performs a real, live write to Azure DevOps. Don't guess fields you
+  aren't confident about (iteration path, area path, parent id) - ask the
+  user rather than inventing a value.
+- The actual API call lives in the `azure-devops` skill's
+  `scripts/devops.py` (`workitem-create` command) - this skill is a thin,
+  confirmation-gated wrapper around it. See that skill's SKILL.md for the
+  full `workitem-create` argument reference.
