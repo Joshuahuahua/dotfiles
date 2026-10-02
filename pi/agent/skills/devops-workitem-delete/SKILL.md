@@ -1,6 +1,6 @@
 ---
 name: devops-workitem-delete
-description: Deletes a real Azure DevOps work item (soft-delete to the recycle bin by default), gated behind a mandatory user confirmation dialog enforced by the skill-confirm-gate extension. Use when the user asks to delete/remove a devops ticket or work item.
+description: Soft-deletes a real Azure DevOps work item to the project recycle bin (never permanent), gated behind a mandatory user confirmation dialog enforced by the skill-confirm-gate extension. Use when the user asks to delete/remove a devops ticket or work item.
 metadata:
   requires-confirmation: true
 ---
@@ -21,15 +21,15 @@ call is blocked and `bin/delete.sh` never executes - nothing is deleted.
    type/title first (look it up with the `azure-devops` skill's
    `workitem <id>` command) so they're confirming a specific, known item -
    never delete an id you haven't looked up and described back to them.
-2. By default this is a **soft delete** - the item moves to the project's
-   recycle bin and can be recovered later. Only pass `--destroy` for a
-   permanent, unrecoverable delete, and only if the user explicitly asks
-   for that.
+2. This is **always a soft delete** - the item moves to the project's
+   recycle bin and remains recoverable there. Permanent/unrecoverable
+   deletion is intentionally not supported anywhere in this skill or in
+   `workitem-delete` itself - there is no flag or option for it, by design.
 3. Run the helper script from this skill's directory so the confirm gate's
    path-matching triggers:
 
 ```bash
-cd ~/.pi/agent/skills/devops-workitem-delete && ./bin/delete.sh <id> [--destroy]
+cd ~/.pi/agent/skills/devops-workitem-delete && ./bin/delete.sh <id>
 ```
 
 4. If the user approves in the dialog, the script confirms the deletion. If

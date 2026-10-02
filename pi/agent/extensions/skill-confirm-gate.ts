@@ -171,14 +171,15 @@ function discoverFlaggedSkills(cwd: string): FlaggedSkill[] {
 }
 
 export default function (pi: ExtensionAPI) {
-	let flaggedSkills: FlaggedSkill[] = discoverFlaggedSkills(process.cwd());
-
-	pi.on("session_start", async (_event, ctx) => {
-		flaggedSkills = discoverFlaggedSkills(ctx.cwd);
-	});
-
 	pi.on("tool_call", async (event, ctx) => {
-		if (event.toolName !== "bash" || flaggedSkills.length === 0) return undefined;
+		if (event.toolName !== "bash") return undefined;
+
+		// Re-scan on every call rather than caching once per session/reload: a
+		// skill can be created or edited mid-session, and a stale cached list
+		// would silently let a newly-flagged skill's commands through
+		// unconfirmed. This is a handful of small file reads, not a hot path.
+		const flaggedSkills = discoverFlaggedSkills(ctx.cwd);
+		if (flaggedSkills.length === 0) return undefined;
 
 		const command = String(event.input.command ?? "");
 		const matched = flaggedSkills.find((skill) => skill.matchPatterns.some((pattern) => command.includes(pattern)));

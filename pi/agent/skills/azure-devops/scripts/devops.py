@@ -133,23 +133,21 @@ def cmd_workitem(cfg, args):
 def cmd_workitem_delete(cfg, args):
     """Delete a work item.
 
-    Usage: workitem-delete <id> [--destroy]
+    Usage: workitem-delete <id>
 
-    Without --destroy, Azure DevOps soft-deletes the item into the project's
-    recycle bin (recoverable). With --destroy, it is permanently destroyed
-    and cannot be recovered.
+    Always a soft-delete: the item moves to the project's recycle bin and
+    remains recoverable there. Permanent destruction is intentionally not
+    supported by this command - there is no flag or code path that can
+    pass destroy=true to the API, by design.
     """
     if not args:
-        sys.exit("usage: workitem-delete <id> [--destroy]")
+        sys.exit("usage: workitem-delete <id>")
 
     wi_id = args[0]
-    destroy = "--destroy" in args
 
     url = project_url(cfg, f"_apis/wit/workitems/{wi_id}?api-version={API_VERSION}")
-    if destroy:
-        url += "&destroy=true"
     request(cfg, "DELETE", url)
-    print(f"Deleted #{wi_id}" + (" (permanently destroyed)" if destroy else " (moved to recycle bin)"))
+    print(f"Deleted #{wi_id} (moved to recycle bin)")
 
 
 def cmd_workitem_create(cfg, args):

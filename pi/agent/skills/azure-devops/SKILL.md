@@ -107,6 +107,17 @@ python3 devops.py workitem-create <type> "<title>" \
 
 Prints the new item's id and web URL on success.
 
+### Deleting work items (write access)
+
+Same rules as creating: route through the `devops-workitem-delete` skill,
+not this script directly, so the confirmation gate applies. Always a
+soft-delete to the project's recycle bin (recoverable) - there is no
+permanent-destroy option in this command, by design.
+
+```bash
+python3 devops.py workitem-delete <id>
+```
+
 ### Pull requests
 
 ```bash
