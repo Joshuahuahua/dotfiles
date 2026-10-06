@@ -194,6 +194,8 @@ def cmd_workitem_create(cfg, args):
         patch.append({"op": "add", "path": "/fields/System.Tags", "value": opts["tags"]})
     if "estimate" in opts:
         patch.append({"op": "add", "path": "/fields/Microsoft.VSTS.Scheduling.OriginalEstimate", "value": opts["estimate"]})
+    if "remaining" in opts:
+        patch.append({"op": "add", "path": "/fields/Microsoft.VSTS.Scheduling.RemainingWork", "value": opts["remaining"]})
     if "parent" in opts:
         patch.append({
             "op": "add",
@@ -248,6 +250,8 @@ def cmd_workitem_update(cfg, args):
         "iteration": "System.IterationPath",
         "area": "System.AreaPath",
         "tags": "System.Tags",
+        "estimate": "Microsoft.VSTS.Scheduling.OriginalEstimate",
+        "remaining": "Microsoft.VSTS.Scheduling.RemainingWork",
     }
 
     patch = [
