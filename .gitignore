@@ -3,3 +3,4 @@ pi/agent/skills/toggl-track/.token
 pi/agent/skills/figma/.token
 __pycache__/
 *.pyc
+pi/agent/skills/sharepoint-rest/.token_cache.json
