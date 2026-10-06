@@ -107,6 +107,23 @@ python3 devops.py workitem-create <type> "<title>" \
 
 Prints the new item's id and web URL on success.
 
+### Updating work items (write access)
+
+Same rules as creating: route through the `devops-workitem-update` skill,
+not this script directly, so the confirmation gate applies. Use this for
+state changes (e.g. moving a ticket to "Code Review"), reassignment, or
+editing any other field on an existing item.
+
+```bash
+python3 devops.py workitem-update <id> \
+  [--state "<state>"] [--title "<text>"] [--description "<text>"] \
+  [--assigned-to <email>] [--iteration "<path>"] [--area "<path>"] \
+  [--tags "a; b"]
+```
+
+At least one field option is required; only the given fields are changed.
+Prints the updated field values on success.
+
 ### Deleting work items (write access)
 
 Same rules as creating: route through the `devops-workitem-delete` skill,

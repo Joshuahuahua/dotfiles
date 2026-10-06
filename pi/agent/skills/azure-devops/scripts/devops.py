@@ -214,6 +214,59 @@ def cmd_workitem_create(cfg, args):
         print(wi_url)
 
 
+def cmd_workitem_update(cfg, args):
+    """Update fields on an existing work item.
+
+    Usage: workitem-update <id> [--state STATE] [--title TEXT]
+           [--description TEXT] [--assigned-to EMAIL] [--iteration PATH]
+           [--area PATH] [--tags "a; b"]
+
+    At least one field option must be given. Only the fields passed are
+    changed - everything else on the work item is left as-is.
+    """
+    if len(args) < 1:
+        sys.exit("usage: workitem-update <id> [--state STATE] [--title TEXT] "
+                  "[--description TEXT] [--assigned-to EMAIL] [--iteration PATH] "
+                  "[--area PATH] [--tags \"a; b\"]")
+
+    wi_id = args[0]
+    rest = args[1:]
+    opts = {}
+    i = 0
+    while i < len(rest):
+        if rest[i].startswith("--") and i + 1 < len(rest):
+            opts[rest[i][2:]] = rest[i + 1]
+            i += 2
+        else:
+            i += 1
+
+    field_map = {
+        "state": "System.State",
+        "title": "System.Title",
+        "description": "System.Description",
+        "assigned-to": "System.AssignedTo",
+        "iteration": "System.IterationPath",
+        "area": "System.AreaPath",
+        "tags": "System.Tags",
+    }
+
+    patch = [
+        {"op": "add", "path": f"/fields/{field_map[key]}", "value": value}
+        for key, value in opts.items()
+        if key in field_map
+    ]
+    if not patch:
+        sys.exit("error: no recognised field options given - nothing to update")
+
+    url = project_url(cfg, f"_apis/wit/workitems/{wi_id}?api-version={API_VERSION}")
+    result = request(cfg, "PATCH", url, patch, content_type="application/json-patch+json")
+    fields = result.get("fields", {})
+    print(f"Updated #{wi_id} [{fields.get('System.WorkItemType')}] {fields.get('System.Title')}")
+    for key in opts:
+        if key in field_map:
+            print(f"  {field_map[key]} -> {fields.get(field_map[key])}")
+
+
 def run_wiql(cfg, where_clause, top=50):
     query = (
         "SELECT [System.Id], [System.Title], [System.State], [System.WorkItemType], "
@@ -508,6 +561,7 @@ def main():
     commands = {
         "workitem": cmd_workitem,
         "workitem-create": cmd_workitem_create,
+        "workitem-update": cmd_workitem_update,
         "workitem-delete": cmd_workitem_delete,
         "query": cmd_query,
         "my-active": cmd_my_active,
