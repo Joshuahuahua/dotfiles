@@ -177,7 +177,13 @@ def cmd_workitem_create(cfg, args):
 
     patch = [{"op": "add", "path": "/fields/System.Title", "value": title}]
     if "description" in opts:
-        patch.append({"op": "add", "path": "/fields/System.Description", "value": opts["description"]})
+        # The "Bug" work item type uses Repro Steps as its required narrative field
+        # instead of (plain) Description - Azure DevOps rejects a Bug with Description
+        # set but Repro Steps empty.
+        description_field = (
+            "Microsoft.VSTS.TCM.ReproSteps" if wi_type.lower() == "bug" else "System.Description"
+        )
+        patch.append({"op": "add", "path": f"/fields/{description_field}", "value": opts["description"]})
     if "assigned-to" in opts:
         patch.append({"op": "add", "path": "/fields/System.AssignedTo", "value": opts["assigned-to"]})
     if "iteration" in opts:
