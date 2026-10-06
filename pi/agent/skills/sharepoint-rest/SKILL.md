@@ -64,12 +64,14 @@ This starts the device-code flow, opens
 user code to the clipboard automatically so Josh just has to paste it and
 approve. Then polls until approved and caches the access + refresh token.
 
-Tokens are cached at `~/.pi/agent/skills/sharepoint-rest/.token_cache.json`
-(resolves into the dotfiles repo, gitignored — see below). Access tokens
-last about an hour; the script auto-refreshes using the cached refresh
-token on every call, so `login` only needs to be re-run once the refresh
-token itself goes stale (inactivity over an extended period) or if no cache
-file exists yet.
+Tokens are cached **per Pi session**, not shared or persisted across
+sessions: the cache file lives at `/tmp/spo-token-cache-<PI_SESSION_ID>.json`
+(mode 0600), keyed off the `PI_SESSION_ID` env var. A different session has
+a different session id, so it has no cache file yet and cannot read this
+session's token - it would need to run `login` itself. Within one session,
+access tokens last about an hour and the script auto-refreshes using the
+cached refresh token on every call, so `login` only needs to be run once per
+session (re-run it again if the refresh token itself goes stale).
 
 ### GET a REST path
 
@@ -105,8 +107,9 @@ so results are directly comparable to what the webpart would render.
 
 - If a call fails with 401, the cached token has likely gone fully stale —
   run `login` again.
-- The token cache file is machine-local and ephemeral in spirit: never print
-  its contents, never commit it, never paste a token into chat.
+- The token cache file is session-scoped and ephemeral (lives in `/tmp`,
+  never touches the repo): never print its contents, never commit it, never
+  paste a token into chat.
 - When debugging a specific webpart's query builder (e.g.
   `Apps/Sharepoint/src/webparts/Events/shared/eventsApi4.ts`), the fastest
   loop is: generate the `ViewXml` the builder would produce, feed it to

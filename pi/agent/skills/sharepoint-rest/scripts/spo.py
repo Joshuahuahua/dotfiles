@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Live SharePoint Online REST testing via device-code OAuth.
 
-No extra dependencies - stdlib only (urllib). Caches tokens next to this
-script so the device-code flow only has to be repeated when the refresh
-token itself expires (Azure AD default ~90 days of inactivity).
+No extra dependencies - stdlib only (urllib). Tokens are cached per Pi
+session (keyed by PI_SESSION_ID) in /tmp, not shared across sessions, so a
+different session cannot read or reuse this session's token. The device-code
+flow has to be repeated once per session as a result - that's intentional.
 """
 import json
 import os
@@ -15,7 +16,15 @@ import urllib.parse
 import urllib.request
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-CACHE_FILE = os.environ.get("SPO_TOKEN_CACHE") or os.path.join(SCRIPT_DIR, "..", ".token_cache.json")
+_SESSION_ID = os.environ.get("PI_SESSION_ID")
+if os.environ.get("SPO_TOKEN_CACHE"):
+    CACHE_FILE = os.environ["SPO_TOKEN_CACHE"]
+elif _SESSION_ID:
+    CACHE_FILE = f"/tmp/spo-token-cache-{_SESSION_ID}.json"
+else:
+    # No Pi session id available (e.g. run outside Pi) - fall back to a
+    # process-tree-scoped file so it's still not a shared/persistent cache.
+    CACHE_FILE = f"/tmp/spo-token-cache-pid{os.getppid()}.json"
 CACHE_FILE = os.path.abspath(CACHE_FILE)
 
 TENANT_ID = os.environ.get("SPO_TENANT_ID", "fa17b8ee-13de-4039-84de-200564f4fcfe")
