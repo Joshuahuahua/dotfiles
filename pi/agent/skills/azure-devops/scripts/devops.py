@@ -153,16 +153,20 @@ def cmd_workitem_delete(cfg, args):
 def cmd_workitem_create(cfg, args):
     """Create a work item.
 
-    Usage: workitem-create <type> <title> [--description TEXT]
+    Usage: workitem-create <type> <title> --description TEXT --estimate HOURS
            [--assigned-to EMAIL] [--iteration PATH] [--area PATH]
-           [--parent ID] [--tags "a; b"] [--estimate HOURS]
+           [--parent ID] [--tags "a; b"]
 
     <type> is a work item type name, e.g. Task, Bug, "User Story".
+    --description and --estimate are required - Azure DevOps rejects the
+    create call without them anyway, so fail fast with a clear message
+    instead of a raw 400 error.
     """
+    usage = ('usage: workitem-create <type> <title> --description TEXT --estimate HOURS '
+              '[--assigned-to EMAIL] [--iteration PATH] [--area PATH] '
+              '[--parent ID] [--tags "a; b"]')
     if len(args) < 2:
-        sys.exit("usage: workitem-create <type> <title> [--description TEXT] "
-                  "[--assigned-to EMAIL] [--iteration PATH] [--area PATH] "
-                  "[--parent ID] [--tags \"a; b\"] [--estimate HOURS]")
+        sys.exit(usage)
 
     wi_type, title = args[0], args[1]
     rest = args[2:]
@@ -174,6 +178,9 @@ def cmd_workitem_create(cfg, args):
             i += 2
         else:
             i += 1
+
+    if "description" not in opts or "estimate" not in opts:
+        sys.exit(f"error: --description and --estimate are required\n{usage}")
 
     patch = [{"op": "add", "path": "/fields/System.Title", "value": title}]
     if "description" in opts:

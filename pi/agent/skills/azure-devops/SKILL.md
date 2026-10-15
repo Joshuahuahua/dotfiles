@@ -101,11 +101,14 @@ skill-confirm-gate extension's confirmation dialog gates it.
 
 ```bash
 python3 devops.py workitem-create <type> "<title>" \
-  [--description "<text>"] [--assigned-to <email>] \
+  --description "<text>" --estimate <hours> \
+  [--assigned-to <email>] \
   [--iteration "<path>"] [--area "<path>"] [--parent <id>] [--tags "a; b"]
 ```
 
-Prints the new item's id and web URL on success.
+`--description` and `--estimate` are required (Azure DevOps rejects the
+create without them) - ask the user for an estimate if they haven't given
+one rather than guessing. Prints the new item's id and web URL on success.
 
 ### Updating work items (write access)
 

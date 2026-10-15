@@ -18,16 +18,20 @@ call is blocked and `bin/create.sh` never executes - nothing is created.
 ## Workflow
 
 1. Work out the work item's fields from context: type (Task, Bug, User
-   Story, etc.), title, and optionally description, assignee, iteration,
-   area path, parent id, tags.
-2. Tell the user exactly what you're about to create (type, title, and any
-   other fields) before running the command - the confirm dialog only shows
-   the raw bash command, so make sure your chat message is equally clear.
+   Story, etc.), title, description, and estimate (hours), plus optionally
+   assignee, iteration, area path, parent id, tags. `--description` and
+   `--estimate` are **required** - Azure DevOps rejects the create without
+   them. Ask the user for an estimate if they haven't given one; don't
+   guess it.
+2. Tell the user exactly what you're about to create (type, title,
+   description, estimate, and any other fields) before running the command
+   - the confirm dialog only shows the raw bash command, so make sure your
+   chat message is equally clear.
 3. Run the helper script from this skill's directory so the confirm gate's
    path-matching triggers:
 
 ```bash
-cd ~/.pi/agent/skills/devops-workitem-create && ./bin/create.sh "<type>" "<title>" [--description "<text>"] [--assigned-to <email>] [--iteration "<path>"] [--area "<path>"] [--parent <id>] [--tags "a; b"]
+cd ~/.pi/agent/skills/devops-workitem-create && ./bin/create.sh "<type>" "<title>" --description "<text>" --estimate <hours> [--assigned-to <email>] [--iteration "<path>"] [--area "<path>"] [--parent <id>] [--tags "a; b"]
 ```
 
 4. If the user approves in the dialog, the script prints the new item's id
