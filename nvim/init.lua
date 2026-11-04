@@ -24,7 +24,6 @@ require("paq")({
   "hrsh7th/cmp-cmdline",
   "rafamadriz/friendly-snippets",
 
-  "supermaven-inc/supermaven-nvim",
   "nvim-tree/nvim-web-devicons",
   "nvim-lualine/lualine.nvim",
   "folke/noice.nvim",
@@ -41,6 +40,8 @@ require("paq")({
 
   "norcalli/nvim-colorizer.lua", -- Colorizer
 
+
+  "monkoose/neocodeium",
 
   -- Everything else
   "folke/tokyonight.nvim",

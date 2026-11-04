@@ -128,7 +128,6 @@ local servers = {
 }
 
 require("mason").setup({
-
   PATH = "prepend", -- "skip" seems to cause the spawning error
 })
 require("mason-lspconfig").setup({
@@ -157,7 +156,7 @@ local luasnip = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup()
 
-require("supermaven-nvim").setup({})
+require("neocodeium").setup({})
 
 cmp.setup({
   snippet = {
@@ -267,6 +266,7 @@ require("conform").setup({
     typescript = { "prettier" },
     typescriptreact = { "prettier" },
     html = { "prettier" },
+    json = { "prettier" },
     python = { "isort", "black" },
     scss = { "prettier" },
     css = { "prettier" },
