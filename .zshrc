@@ -90,6 +90,19 @@ alias img="chafa"
 alias size="stat -c %s"
 dprint() { ( cd /home/josh/development/personal/devopsPrinter && pnpm dev -- "$@" ) }
 
+# Universal clipboard alias (for piping)
+if command -v pbcopy &> /dev/null; then
+    alias yy='pbcopy'
+elif command -v wl-copy &> /dev/null; then
+    alias yy='wl-copy'
+elif command -v xclip &> /dev/null; then
+    alias yy='xclip -selection clipboard'
+elif command -v clip.exe &> /dev/null; then
+    alias yy='clip.exe'
+fi
+
+
+
 eval "$(zoxide init zsh)"
 
 # fnm
@@ -152,3 +165,4 @@ export NVM_DIR="$HOME/.nvm"
 # load-nvmrc
 
 
+export PATH=$PATH:/usr/local/go/bin
