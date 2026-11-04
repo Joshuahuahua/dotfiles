@@ -6,3 +6,6 @@
 
 ## Project memory
 - Apps/Sharepoint/src/shared/telemetry/constants.ts has APPLICATION_INSIGHTS_ENDPOINT hardcoded to the REAL PRODUCTION HuddlerTelemetry App Insights component's connection string (InstrumentationKey=c0a4d7df-f834-4e94-98ea-b38325d32f4f, appId e1bafea2-a820-4a9b-9381-8d0ce8153752, in the HuddlerSubscriptionManager RG on the jhollander subscription). This is NOT environment-specific - there's no staging/dev equivalent wired up, so any code path that calls trackTelemetry/recordMetric always sends real events into production telemetry regardless of which environment the SharePoint app is actually deployed to. This is the same class of hardcoded-secret/endpoint issue found repeatedly during the SubscriptionManager Bicep migration work. Not yet fixed - flagged as a known issue to potentially address later (e.g. make it configurable per environment like the other secrets fixed in that migration). _(saved 2026-08-25)_
+
+## Project memory
+- When doing the SharePoint device-code auth flow (opening https://login.microsoft.com/device via xdg-open), also copy the user_code to the clipboard (xclip -selection clipboard) right after launching the URL, so Josh can just paste it instead of typing it. _(saved 2026-09-16)_

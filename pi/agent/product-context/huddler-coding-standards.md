@@ -3,6 +3,13 @@
   Synced from wiki commit: 81f1ff8d5d9bdf0040add87aa90d7d5219ddaf4c (2026-05-19 07:49:26 +0000)
   Do not edit by hand — refresh via the "wiki-sync" skill instead.
 
+  LOCAL-ONLY ADDITION: the "Shared UI Component Wrappers (Fluent UI)" section
+  below was added directly here on 2026-09-25 and is intentionally NOT in the
+  wiki - that wiki repo is read-only, so this section will always be a
+  divergence from the synced source rather than something to push upstream.
+  A future wiki-sync run will overwrite the rest of this file from the wiki
+  but should preserve/re-add this section by hand afterward.
+
   This file is symlinked as AGENTS.md into the Huddler product repo working
   copies (workspace1/2/3) so it's automatically applied as project context
   any time work happens in that repo.
@@ -225,6 +232,18 @@ Implement functional components (functional development) using the single respon
 ### Code Duplication
 
 Focus on eliminating code duplication by implementing reusable functions, components and modules where possible.
+
+---
+
+### Shared UI Component Wrappers (Fluent UI)
+
+Rather than importing Fluent UI components directly (`@fluentui/react`) in feature code, we wrap them once in `Apps/Sharepoint/src/shared/components/` and import the wrapper instead. This keeps restyling/theming changes to a single place instead of every usage site.
+
+**Ensure you:**
+- [ ] Check `Apps/Sharepoint/src/shared/components/` for an existing wrapper before importing a Fluent UI control directly.
+- [ ] If no wrapper exists yet for the control you need, create one there instead of importing Fluent directly into your component.
+- [ ] Name the new wrapper file and its exported component after the equivalent component in our shared shadcn UI library (`Apps/UI`), not the Fluent name - e.g. Fluent's `Dropdown` is wrapped and exported as `Select` (`select.tsx`), since that's what the shadcn library calls it.
+- [ ] Not every Fluent component has a wrapper yet - this is being progressively adopted. Wrapper files are identifiable by a lowercase-starting filename (e.g. `button.tsx`, `select.tsx`, `icon.tsx`); PascalCase-starting files (e.g. `DateBox.tsx`) predate this convention and haven't been migrated yet.
 
 ---
 

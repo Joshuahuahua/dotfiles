@@ -89,3 +89,22 @@ A pre-migration backup of the entire `~/.pi/agent` directory exists at `~/pi-age
 
 ## Remembered items
 - Keep git commit messages short: body should be at most a few short sentences, not long detailed multi-paragraph descriptions. _(saved 2026-09-15)_
+
+## Remembered items
+- Never use the phrase "circle back" under any circumstances — the user strongly dislikes it. _(saved 2026-09-16)_
+
+## Remembered items
+- Investigated pi extensions for reducing token/quota usage (pi-subagents, pi-lens, billion-context, context-mode, pi-memory). Verdict: context-mode was the best fit for cutting raw-data-into-context usage (sandboxed code execution instead of dumping file/log/tool output into context). pi-subagents actually increases usage (delegates to child sessions); pi-lens and pi-memory don't target token reduction; billion-context is for marathon multi-day sessions via a proxy, overkill for normal quota concerns.
+
+Installed npm:context-mode globally (`pi install npm:context-mode`) and removed npm:pi-subagents (which had been installed by mistake instead of context-mode). Verified working: `pi list` shows context-mode; `ctx_stats` tool responds correctly after session reload.
+
+Going forward in pi sessions with context-mode active, prefer this tool hierarchy: ctx_batch_execute > ctx_execute > ctx_execute_file > ctx_search for processing large/derived output. Use ctx_execute_file for reading/analyzing files, ctx_batch_execute for multi-command research, ctx_fetch_and_index + ctx_search for web pages, ctx_index for indexing docs. Use ctx_stats/ctx_doctor/ctx_upgrade/ctx_purge for meta operations. This reduces raw bytes entering conversation context and should help with Josh's API quota usage. _(saved 2026-09-17)_
+
+## Remembered items
+- When writing documentation/comments/JSDoc/etc, prefer to line-break after a sentence ends (after the '.'). If a line is getting too long, prefer shortening the sentence over wrapping mid-sentence onto a new line — then break at the sentence boundary. Lines can go up to around column 100. _(saved 2026-09-24)_
+
+## Remembered items
+- Never use the em dash character (—) in any output. Only use regular hyphens (-) instead, always. _(saved 2026-09-24)_
+
+## Remembered items
+- Prefer NOT to use React's useEffect if at all possible. Look for alternatives first (derive values during render, lift state, compute from props directly, etc.) before reaching for useEffect. It's fine to use it when it's genuinely the right tool (e.g. syncing with external systems), but as a default preference, actively try to avoid it and find another solution. _(saved 2026-09-29)_
