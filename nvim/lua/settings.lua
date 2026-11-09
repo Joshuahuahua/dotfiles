@@ -28,6 +28,18 @@ o.shiftwidth = 2
 o.expandtab = true
 o.smartindent = true
 
+-- Keep Python buffers at two spaces even if a filetype plugin changes the
+-- global indentation defaults.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
+  end,
+})
+
 -- Window behaviour
 o.splitright = true
 o.splitbelow = true
