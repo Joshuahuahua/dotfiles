@@ -89,6 +89,7 @@ alias say="spd-say"
 alias pic="chafa"
 alias img="chafa"
 alias size="stat -c %s"
+alias teams="/home/josh/development/clones/teams-tui-go/teams-tui-go"
 dprint() { ( cd /home/josh/development/personal/devopsPrinter && pnpm dev -- "$@" ) }
 
 # Universal clipboard alias (for piping)
