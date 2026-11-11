@@ -38,8 +38,6 @@ require("paq")({
   "norcalli/nvim-colorizer.lua", -- Colorizer
 
 
-  "monkoose/neocodeium",
-
   -- Everything else
   "folke/tokyonight.nvim",
   "mbbill/undotree",

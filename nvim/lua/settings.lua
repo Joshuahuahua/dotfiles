@@ -168,8 +168,6 @@ local luasnip = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup()
 
-require("neocodeium").setup({})
-
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -213,7 +211,6 @@ cmp.setup({
     -- end, { "i", "s" }),
   }),
   sources = {
-    -- { name = "copilot", group_index = 2 },
     { name = "nvim_lua" },
     { name = "nvim_lsp" },
 

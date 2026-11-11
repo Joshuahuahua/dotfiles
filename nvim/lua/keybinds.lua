@@ -129,31 +129,3 @@ set("n", g .. "s", "<cmd>Telescope git_status<CR>")
 set("n", g .. "b", "<cmd>GitBlameToggle<CR>") -- toggle inline blame on/off
 set("n", g .. "Y", "<cmd>GitBlameCopyCommitURL<CR>") -- yank commit URL
 set("n", g .. "o", "<cmd>GitBlameOpenCommitURL<CR>") -- open commit in browser
-
-
--- NeoCodeium
-local neocodeium = require("neocodeium")
-set("i", "<A-f>", function()
-    neocodeium.accept()
-end, { desc = "NeoCodeium: Accept suggestion" })
-
-set("i", "<A-w>", function()
-    neocodeium.accept_word()
-end, { desc = "NeoCodeium: Accept next word" })
-
-set("i", "<A-e>", function()
-    neocodeium.accept_line()
-end, { desc = "NeoCodeium: Accept next line" })
-
-set("i", "<A-]>", function()
-    neocodeium.cycle_or_complete()
-end, { desc = "NeoCodeium: Cycle to next suggestion" })
-
-set("i", "<A-[>", function()
-    neocodeium.cycle_or_complete(-1)
-end, { desc = "NeoCodeium: Cycle to previous suggestion" })
-
-set("i", "<A-c>", function()
-    neocodeium.clear()
-end, { desc = "NeoCodeium: Clear current suggestion" })
-
