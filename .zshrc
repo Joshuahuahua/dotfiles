@@ -80,6 +80,7 @@ source $ZSH/oh-my-zsh.sh
 alias zshconfig="nvim ~/.zshrc"
 alias zshrc="nvim ~/.zshrc"
 alias lg="lazygit"
+alias ld="lazydocker"
 alias t="tmux"
 alias p="pwsh"
 alias ls="eza -a -x --icons --group-directories-first"
