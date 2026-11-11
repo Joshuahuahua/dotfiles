@@ -1,11 +1,15 @@
 {
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.2",
   "theme": "dark",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-sonnet-5",
-  "defaultThinkingLevel": "medium",
+  "defaultProvider": "home-ollama",
+  "defaultModel": "qwen3.5:9b",
+  "defaultThinkingLevel": "off",
   "packages": [
-    "npm:pi-web-access",
-    "npm:context-mode"
-  ]
+    "npm:pi-web-access"
+  ],
+  "deviceId": "6c0d1b97-139c-4af4-b5c5-ff919fd70f2f",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.47.0",
+    "{\"source\":\"npm:pi-free\",\"scope\":\"user\"}": "2.8.6"
+  }
 }
