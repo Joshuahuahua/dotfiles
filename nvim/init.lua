@@ -6,9 +6,6 @@ require("paq")({
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
 
-  -- AI (99: custom pi.dev/GitHub Copilot provider, see lua/config/99.lua)
-  "ThePrimeagen/99",
-
   "j-hui/fidget.nvim",
   "folke/lazydev.nvim",
 
@@ -58,4 +55,3 @@ require("paq")({
 
 require("settings")
 require("keybinds")
-require("config.99")
