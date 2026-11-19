@@ -43,10 +43,7 @@ if [[ -z "$text" ]]; then
   exit 1
 fi
 
-# Always speak via spd-say
-spd-say "$text"
-
-# If --notify flag provided, also send notifications
+# If notify mode, send notifications first before speech
 if [[ "$notified" == true ]]; then
   # Desktop notification (critical priority for reliability)
   notify-send -u critical "Pi" "$text"
@@ -54,3 +51,6 @@ if [[ "$notified" == true ]]; then
   # Phone ping via kdeconnect
   kdeconnect-cli -n "Galaxy S25 Ultra" --ping-msg "$text"
 fi
+
+# Always speak via spd-say (after notifications in notify mode)
+spd-say "$text"
