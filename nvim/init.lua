@@ -21,6 +21,10 @@ require("paq")({
   "hrsh7th/cmp-cmdline",
   "rafamadriz/friendly-snippets",
 
+  -- AI suggestions
+  "milanglacier/minuet-ai.nvim",
+
+
   "nvim-tree/nvim-web-devicons",
   "nvim-lualine/lualine.nvim",
   "folke/noice.nvim",
