@@ -1,6 +1,8 @@
 ---
 name: say
 description: Speaks text aloud using spd-say, optionally also sending system notification and kdeconnect alert to phone. Use when user asks you to 'say' something or make them aware via voice/audio feedback.
+tools: bash
+cmd: ~/.pi/agent/skills/say/run.sh
 metadata:
   requires-confirmation: false
 ---
