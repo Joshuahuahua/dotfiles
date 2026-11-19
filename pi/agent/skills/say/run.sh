@@ -23,27 +23,14 @@ fi
 notified=false
 text=""
 
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --notify)
-      notified=true
-      shift
-      text="$1"
-      shift
-      ;;
-    *)
-      # If no --notify flag and argument provided, treat as plain text
-      if [[ -z "$text" ]]; then
-        text="$1"
-        shift
-      else
-        echo "Usage: $0 <message> or $0 --notify \"message\"" >&2
-        exit 1
-      fi
-      ;;
-  esac
-done
+# Parse arguments - check for notify flag first
+if [[ "$1" == "--notify" || "$1" == "-n" ]]; then
+  notified=true
+  shift
+fi
+
+# Remaining positional argument is the text
+text="$1"
 
 # Check we have text
 if [[ -z "$text" ]]; then
