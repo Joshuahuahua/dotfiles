@@ -29,8 +29,13 @@ if [[ "$1" == "--notify" || "$1" == "-n" ]]; then
   shift
 fi
 
-# Remaining positional argument is the text
 text="$1"
+
+# Check if first arg was "notify" mode (not a flag)
+if [[ "$text" == "notify" ]]; then
+  notified=true
+  text="$2"
+fi
 
 # Check we have text
 if [[ -z "$text" ]]; then
