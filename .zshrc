@@ -90,6 +90,8 @@ alias pic="chafa"
 alias img="chafa"
 alias size="stat -c %s"
 alias teams="/home/josh/development/clones/teams-tui-go/teams-tui-go"
+alias m365tui="/usr/local/bin/m365"
+alias ollamaswitch="~/.ollama-models-switch"
 dprint() { ( cd /home/josh/development/personal/devopsPrinter && pnpm dev -- "$@" ) }
 
 # Universal clipboard alias (for piping)
