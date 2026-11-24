@@ -147,6 +147,11 @@ require("mason-lspconfig").setup({
   automatic_enable = false,
 })
 
+-- Formatters, linters and debug adapters (LSP servers are handled above)
+require("mason-tool-installer").setup({
+  ensure_installed = { "stylua", "prettier", "black", "ruff", "yamllint", "debugpy" },
+})
+
 require("fidget").setup({}) -- Notifications
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
