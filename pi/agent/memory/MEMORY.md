@@ -25,28 +25,17 @@
 - When the user says "pi update", interpret it as a direct instruction to run the Pi CLI update command to update the Pi installation, without asking for clarification. _(saved 2026-07-15)_
 
 ## Remembered items
-- User's ~/.zshrc defines alias `say="spd-say"`. If the user asks to 'say' something, use `spd-say` with the provided text. _(saved 2026-07-16)_
-
-## Remembered items
-- Interpret 'say' requests by intent, not literally. Example: if the user says 'say hello to me', speak 'hello', not the full instruction. If the user asks to be told when a long-running task is done, use the remembered `say` command (`spd-say`) to announce completion. _(saved 2026-07-16)_
-
-## Remembered items
-- User's notify action should use `notify-send "title" "message"` AND `kdeconnect-cli -n "Galaxy S25 Ultra" --ping-msg "message"`. Choose the title and message to fit the scenario when the user asks to be notified. _(saved 2026-11-18)_
-
-## Remembered items
-- For the user's notifications, use `notify-send -u critical "title" "message"` by default, since normal timeout behavior is unreliable on their Cinnamon setup. _(saved 2026-07-16)_
-
-## Remembered items
-- When the user says 'let me know when you're done' or similar, use the remembered `say` command with a short natural completion message, not just 'done'. _(saved 2026-07-16)_
+- Two notification triggers, both handled ONLY via the `say` skill (~/.pi/agent/skills/say/SKILL.md, which calls run.sh). Never run spd-say, notify-send or kdeconnect-cli directly.
+  - "let me know" / "lemme know" (any context): invoke the say skill, voice only (`run.sh "message"`).
+  - "notify me" / "notify me when ...": invoke the say skill with the notify flag (`run.sh --notify "message"`), which adds the desktop notification and phone ping.
+  - Write the full text answer first, then trigger it only once the response is complete (not during reasoning or while subagents run).
+  - Use a short natural message that fits the situation, not just "done". Interpret 'say X' by intent (e.g. 'say hello to me' speaks 'hello'). _(consolidated 2026-11-24)_
 
 ## Remembered items
 - The user's products include "Huddler", "DocHQ", and "Hub". When the user asks a question about "the product", Huddler, DocHQ, or Hub, use the product-wiki skill: search the local wiki at /home/josh/development/work/huddler/Wiki by listing .md file names, shortlisting relevant articles, reading them, and answering from their content (citing the source article path). _(saved 2026-07-22, updated 2026-07-22)_
 
 ## Remembered items
 - Dotfiles repo is at /home/josh/development/clones/dotfiles (contains .zshrc, pi/agent config, etc.). Whenever changes appear there (e.g. after editing memory, settings, skills, zshrc), commit them in logical/split commits by topic — but never push, unless the user explicitly asks to push. _(saved 2026-08-03)_
-
-## Remembered items
-- Distinguish user's two notification-style requests: if they say "let me know" (or similar phrasing implying being told/informed), use the voice/say command (spd-say). If they say "notify me" (or use the word 'notify'), use the desktop notification command (notify-send -u critical "title" "message"). Don't conflate the two triggers. _(saved 2026-08-04)_
 
 ## Remembered items
 - User prefers minimal follow-up questions: only ask when genuinely necessary, not by default. For dotfiles/skill/config changes, always commit proactively without asking first; if a change needs adjusting afterward, amend/modify the existing commit rather than asking permission first. _(saved 2026-08-05)_
@@ -59,9 +48,6 @@
 
 ## Remembered items
 - User dislikes the word "punt" (e.g. for deferring work) — avoid using it; say "defer" or "mark as future work" instead. _(saved 2026-08-17)_
-
-## Remembered items
-- Whenever the user says "let me know" (in any context, not just long-running background tasks), always use the spd-say voice notification (the "say" command) to announce the result/completion, in addition to any text reply. Don't reserve it only for long tasks. _(saved 2026-08-17)_
 
 ## Remembered items
 - User dislikes the phrase "gotcha" — never use it in responses. _(saved 2026-08-28)_
@@ -129,6 +115,3 @@ Temporary scripts/files in temp directory are allowed and should be cleaned up a
 
 ## Remembered items
 - For AWS access, agents can run `aws sso login --profile coreiq_sandbox` to authenticate with the CoreIQ sandbox profile before executing any AWS CLI commands. _(saved 2026-11-23)_
-
-## Remembered items
-- When user asks to "let me know" or "notify me", trigger the notification (spd-say for "let me know", notify-send+kdeconnect for "notify") AFTER writing out the complete answer, not before. The notification should be sent only after the response is fully outputted and ready for them to read, not during reasoning or while subagents are running. _(saved 2026-11-23)_
