@@ -1,5 +1,5 @@
 {
-  "next_id": 12,
+  "next_id": 13,
   "items": [
     {
       "id": 2,
@@ -153,6 +153,15 @@
       "priority": "med",
       "created_at": "2026-11-09T09:22:52Z",
       "updated_at": "2026-11-09T09:22:52Z",
+      "notes": []
+    },
+    {
+      "id": 12,
+      "text": "Set up m365-tui",
+      "status": "open",
+      "priority": "med",
+      "created_at": "2026-11-24T03:45:55Z",
+      "updated_at": "2026-11-24T03:45:55Z",
       "notes": []
     }
   ]
