@@ -1,9 +1,9 @@
 {
   "lastChangelogVersion": "1.6.0",
   "theme": "dark",
-  "defaultProvider": "home-ollama",
-  "defaultModel": "qwen3.6:35b-a3b",
-  "defaultThinkingLevel": "off",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-sonnet-5.5",
+  "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-subagents"
@@ -15,5 +15,25 @@
     "{\"source\":\"npm:pi-free\",\"scope\":\"user\"}": "2.8.6",
     "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.90.0"
   },
-  "hideThinkingBlock": false
+  "hideThinkingBlock": false,
+  "compaction": {
+    "modelOverrides": {
+      "home-ollama/qwen3.6:35b-a3b": {
+        "reserveTokens": 34000,
+        "keepRecentTokens": 8000
+      }
+    }
+  },
+  "subagents": {
+    "agentOverridesByProvider": {
+      "home-ollama": {
+        "scout": {
+          "thinking": "off"
+        },
+        "worker": {
+          "thinking": "off"
+        }
+      }
+    }
+  }
 }
