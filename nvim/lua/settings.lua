@@ -309,7 +309,7 @@ require("conform").setup({
   log_level = vim.log.levels.DEBUG,
 
   formatters_by_ft = {
-    lua = { "prettier" },
+    lua = { "stylua" },
     javascript = { "prettier" },
     javascriptreact = { "prettier" },
     typescript = { "prettier" },
