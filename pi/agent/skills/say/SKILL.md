@@ -1,52 +1,37 @@
 ---
 name: say
-description: Speaks text aloud using spd-say, optionally also sending system notification and kdeconnect alert to phone. Use when user asks you to 'say' something or make them aware via voice/audio feedback.
-tools: bash
-cmd: ~/.pi/agent/skills/say/run.sh
-metadata:
-  requires-confirmation: false
+description: Speaks a message aloud via the say script (spd-say), and with --notify also sends a desktop notification and a KDE Connect phone ping. Use when the user says "let me know" / "lemme know" (voice only), or "notify me" / "notify me when ..." (voice + notification + phone). Also use when asked to "say" something.
 ---
+
 # Say Skill
 
-## Description
+Never run `spd-say`, `notify-send` or `kdeconnect-cli` directly. Always go through `run.sh`.
 
-Speak text aloud using the `spd-say` command (text-to-speech). Optionally, also send a system notification and ping the user's phone via kdeconnect when the `--notify` flag is passed.
+## When to use which
+
+| User says | Command |
+|---|---|
+| "let me know ..." / "lemme know ..." | `run.sh "<message>"` (voice only) |
+| "notify me ..." / "notify me when ..." | `run.sh --notify "<message>"` (voice + desktop + phone) |
+| "say <thing>" | `run.sh "<thing>"` (interpret by intent, e.g. "say hello to me" speaks "hello") |
+
+## Rules
+
+- Write the full text answer first, then run the script once the response is complete.
+  Don't run it during reasoning or while subagents are still working.
+- Use a short, natural message that fits the situation (e.g. "All done, the tests pass"), not just "done".
+- Run it in addition to the normal text reply, not instead of it.
 
 ## Usage
 
 ```bash
-pi say <text to speak>
-pi say --notify "your message"  # Also triggers desktop notification + phone alert
+~/.pi/agent/skills/say/run.sh "I'm all done"
+~/.pi/agent/skills/say/run.sh --notify "Task complete"
 ```
 
-When invoked without arguments or with `--help`, displays usage instructions.
+## What the script does
 
-## Behavior
-
-### Default (voice only)
-- Triggers: `spd-say "<text>"`
-- Result: Text is spoken aloud via system TTS
-
-### With --notify flag (voice + notification + phone ping)
-1. Spoken aloud: `spd-say "<text>"`
-2. Desktop alert: `notify-send -u critical "Pi" "<text>"`
-3. Phone ping: `kdeconnect-cli -n "Galaxy S25 Ultra" --ping-msg "<text>"`
-
-## Examples
-
-```bash
-pi say "I'm all done"
-# Spoken aloud
-
-pi say --notify "Task complete"
-# Spoken aloud + desktop notification + phone alert
-```
-
-## Parameters
-
-- `<text>`: The message to speak (required unless --help/--notify without argument)
-- `--notify`: Optional flag to also trigger system notification and phone ping
-
----
-
-*Uses spd-say for speech, notify-send for desktop alerts, kdeconnect-cli for phone notifications.*
+- Default: `spd-say "<text>"`
+- `--notify` / `-n`: first `notify-send -u critical "Pi" "<text>"`, then
+  `kdeconnect-cli -n "Galaxy S25 Ultra" --ping-msg "<text>"`, then speaks via `spd-say`.
+- `--help` / `-h`: prints usage.
