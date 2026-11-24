@@ -31,7 +31,7 @@
 - Interpret 'say' requests by intent, not literally. Example: if the user says 'say hello to me', speak 'hello', not the full instruction. If the user asks to be told when a long-running task is done, use the remembered `say` command (`spd-say`) to announce completion. _(saved 2026-07-16)_
 
 ## Remembered items
-- User's notify action should use `notify-send "title" "message"`. Choose the title and message to fit the scenario when the user asks to be notified. _(saved 2026-07-16)_
+- User's notify action should use `notify-send "title" "message"` AND `kdeconnect-cli -n "Galaxy S25 Ultra" --ping-msg "message"`. Choose the title and message to fit the scenario when the user asks to be notified. _(saved 2026-11-18)_
 
 ## Remembered items
 - For the user's notifications, use `notify-send -u critical "title" "message"` by default, since normal timeout behavior is unreliable on their Cinnamon setup. _(saved 2026-07-16)_
@@ -108,3 +108,27 @@ Going forward in pi sessions with context-mode active, prefer this tool hierarch
 
 ## Remembered items
 - Prefer NOT to use React's useEffect if at all possible. Look for alternatives first (derive values during render, lift state, compute from props directly, etc.) before reaching for useEffect. It's fine to use it when it's genuinely the right tool (e.g. syncing with external systems), but as a default preference, actively try to avoid it and find another solution. _(saved 2026-09-29)_
+
+## Remembered items
+- User requires explicit approval before:
+- Running AWS CLI/Terraform commands (read/write API calls)
+- Implementing changes to production infrastructure
+- Deploying resources with Terraform apply
+
+Pattern: If user asks "how can I do X" → explain options, don't execute. If user says "do this" or gives specific command → execute with prior explanation.
+
+For multi-step operations: Explain what will happen, ask for approval, then execute after explicit "yes/approved" confirmation.
+
+Temporary scripts/files in temp directory are allowed and should be cleaned up afterward. _(saved 2026-11-12)_
+
+## Remembered items
+- Always prefer to use subagents for investigative work, bug fixing, or code inspection tasks rather than executing commands directly. This protects the context window and handles multi-file searches, build/test runs, and error analysis more efficiently. Only delegate when the task involves reading multiple files, searching logs, running builds/tests, or troubleshooting errors. _(saved 2026-11-19)_
+
+## Remembered items
+- For the coreiq-platform lambda docker migration, all step markdown files must be written to /home/josh/development/work/clients/CoreIQ/coreiq-platform/processing (absolute path, not relative). Step 1 → /home/josh/development/work/clients/CoreIQ/coreiq-platform/processing/step-1.md, Step 2 → step-2.md, etc. Always use this full absolute path — never use shorter forms like /processing which can cause path resolution issues in subagents. _(saved 2026-11-20)_
+
+## Remembered items
+- For AWS access, agents can run `aws sso login --profile coreiq_sandbox` to authenticate with the CoreIQ sandbox profile before executing any AWS CLI commands. _(saved 2026-11-23)_
+
+## Remembered items
+- When user asks to "let me know" or "notify me", trigger the notification (spd-say for "let me know", notify-send+kdeconnect for "notify") AFTER writing out the complete answer, not before. The notification should be sent only after the response is fully outputted and ready for them to read, not during reasoning or while subagents are running. _(saved 2026-11-23)_
