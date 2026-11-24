@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "1.5.2",
+  "lastChangelogVersion": "1.6.0",
   "theme": "dark",
   "defaultProvider": "home-ollama",
-  "defaultModel": "qwen3.5:9b",
+  "defaultModel": "qwen3.6:35b-a3b",
   "defaultThinkingLevel": "off",
   "packages": [
     "npm:pi-web-access",
@@ -13,7 +13,7 @@
   "extensionChangelogVersions": {
     "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.48.0",
     "{\"source\":\"npm:pi-free\",\"scope\":\"user\"}": "2.8.6",
-    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.89.1"
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.90.0"
   },
   "hideThinkingBlock": false
 }
