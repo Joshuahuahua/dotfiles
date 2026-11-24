@@ -171,3 +171,27 @@ export NVM_DIR="$HOME/.nvm"
 
 
 export PATH=$PATH:/usr/local/go/bin
+
+# Record the ssh target on the tmux pane so new splits can reconnect (see tmux/ssh-split.sh).
+# Strips port forwards and remote commands so the stored target is just a plain connection.
+ssh() {
+  if [[ -z $TMUX_PANE ]]; then command ssh "$@"; return; fi
+  local -a keep
+  local i=1 a
+  while (( i <= $# )); do
+    a=${@[i]}
+    case $a in
+      -[DLRW]) (( i += 2 )); continue ;;
+      -[DLRW]?*|-N|-f) (( i++ )); continue ;;
+      -[bcEeFIiJlmOopQSw]) keep+=("$a" "${@[i+1]}"); (( i += 2 )); continue ;;
+      -?*) keep+=("$a") ;;
+      *) keep+=("$a"); break ;;
+    esac
+    (( i++ ))
+  done
+  tmux set-option -p -t "$TMUX_PANE" @ssh_target "${(j: :)${(q)keep[@]}}"
+  command ssh "$@"
+  local rc=$?
+  tmux set-option -p -u -t "$TMUX_PANE" @ssh_target
+  return $rc
+}
