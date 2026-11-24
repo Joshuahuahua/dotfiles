@@ -8,14 +8,17 @@ target="$(tmux show-options -pqv -t "$pane" @ssh_target)"
 
 # Fallback: parse the ssh process running under the pane's shell.
 if [ -z "$target" ]; then
-  ssh_pid="$(pgrep -P "$pid" -x ssh | head -n1)"
+  # The pane's own process may be ssh (panes created by this script), else look at its children.
+  if [ "$(ps -o comm= -p "$pid")" = ssh ]; then ssh_pid="$pid"; else ssh_pid="$(pgrep -P "$pid" -x ssh | head -n1)"; fi
   if [ -n "$ssh_pid" ]; then
     target="$(ps -o args= -p "$ssh_pid" | sed -E 's/^[^ ]*ssh[ ]*//')"
   fi
 fi
 
 if [ -n "$target" ]; then
-  tmux split-window "$dir" -c "$path" "ssh $target"
+  # Tag the new pane too, since it runs ssh directly and bypasses the zsh wrapper.
+  new="$(tmux split-window "$dir" -c "$path" -P -F '#{pane_id}' "ssh $target")"
+  tmux set-option -p -t "$new" @ssh_target "$target"
 else
   tmux split-window "$dir" -c "$path"
 fi
