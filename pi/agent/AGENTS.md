@@ -22,8 +22,6 @@
 - If a project has its own context files, follow those project instructions in addition to these global ones.
 - Treat project context files as potentially important, but keep global memory outside repos.
 
-## Subagent Delegation Rules (Local RAM Conservation)
-- **Protect Context Window:** Whenever a task requires reading multiple files, searching logs, running builds/tests, or troubleshooting errors, delegate it to the `scout` or `worker` subagent instead of doing it directly.
-- **Pass Only Essential Context:** Give the subagent the specific goal, relevant file paths, and constraints—never paste huge logs.
-- **Strictly Sequential (One at a Time):** NEVER call `subagent` more than once in a single turn, and NEVER use `tasks` (parallel mode) or `chain` unless explicitly told. Always run with `async: false` and wait for the subagent to finish before taking the next step.
-- **Make the exit condition EXPLICIT:** ALWAYS be super explicit as to what the end/return condition is for the subagent.
+## Subagents
+- Delegation rules depend on the active model (Claude or local qwen) and are injected automatically as a "delegation-mode" section. Follow that section.
+- When delegating, pass only the goal, relevant paths and constraints, and make the exit condition explicit.

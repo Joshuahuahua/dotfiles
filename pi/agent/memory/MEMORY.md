@@ -80,13 +80,6 @@ A pre-migration backup of the entire `~/.pi/agent` directory exists at `~/pi-age
 - Never use the phrase "circle back" under any circumstances — the user strongly dislikes it. _(saved 2026-09-16)_
 
 ## Remembered items
-- Investigated pi extensions for reducing token/quota usage (pi-subagents, pi-lens, billion-context, context-mode, pi-memory). Verdict: context-mode was the best fit for cutting raw-data-into-context usage (sandboxed code execution instead of dumping file/log/tool output into context). pi-subagents actually increases usage (delegates to child sessions); pi-lens and pi-memory don't target token reduction; billion-context is for marathon multi-day sessions via a proxy, overkill for normal quota concerns.
-
-Installed npm:context-mode globally (`pi install npm:context-mode`) and removed npm:pi-subagents (which had been installed by mistake instead of context-mode). Verified working: `pi list` shows context-mode; `ctx_stats` tool responds correctly after session reload.
-
-Going forward in pi sessions with context-mode active, prefer this tool hierarchy: ctx_batch_execute > ctx_execute > ctx_execute_file > ctx_search for processing large/derived output. Use ctx_execute_file for reading/analyzing files, ctx_batch_execute for multi-command research, ctx_fetch_and_index + ctx_search for web pages, ctx_index for indexing docs. Use ctx_stats/ctx_doctor/ctx_upgrade/ctx_purge for meta operations. This reduces raw bytes entering conversation context and should help with Josh's API quota usage. _(saved 2026-09-17)_
-
-## Remembered items
 - When writing documentation/comments/JSDoc/etc, prefer to line-break after a sentence ends (after the '.'). If a line is getting too long, prefer shortening the sentence over wrapping mid-sentence onto a new line — then break at the sentence boundary. Lines can go up to around column 100. _(saved 2026-09-24)_
 
 ## Remembered items
@@ -108,7 +101,7 @@ For multi-step operations: Explain what will happen, ask for approval, then exec
 Temporary scripts/files in temp directory are allowed and should be cleaned up afterward. _(saved 2026-11-12)_
 
 ## Remembered items
-- Always prefer to use subagents for investigative work, bug fixing, or code inspection tasks rather than executing commands directly. This protects the context window and handles multi-file searches, build/test runs, and error analysis more efficiently. Only delegate when the task involves reading multiple files, searching logs, running builds/tests, or troubleshooting errors. _(saved 2026-11-19)_
+- Delegation rules depend on the active model and are injected automatically from ~/.pi/agent/extensions/profiles/{cloud,local}.md (cloud = Claude, local = qwen on home-ollama). In both modes, offload context-heavy investigative work (many files, long logs, builds/tests) to subagents. Do not restate those rules here. _(updated 2026-11-24)_
 
 ## Remembered items
 - For the coreiq-platform lambda docker migration, all step markdown files must be written to /home/josh/development/work/clients/CoreIQ/coreiq-platform/processing (absolute path, not relative). Step 1 → /home/josh/development/work/clients/CoreIQ/coreiq-platform/processing/step-1.md, Step 2 → step-2.md, etc. Always use this full absolute path — never use shorter forms like /processing which can cause path resolution issues in subagents. _(saved 2026-11-20)_
