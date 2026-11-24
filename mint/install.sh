@@ -264,6 +264,7 @@ main() {
   symlink_path "$REPO_ROOT/pi/agent/product-context" "$HOME/.pi/agent/product-context"
   symlink_path "$REPO_ROOT/pi/agent/memory/tone-profile-user.md" "$HOME/.pi/agent/memory/tone-profile-user.md"
   symlink_path "$REPO_ROOT/pi/agent/memory/tone-profile-wiki.md" "$HOME/.pi/agent/memory/tone-profile-wiki.md"
+  symlink_path "$REPO_ROOT/pi/agent/memory/MEMORY.local.md" "$HOME/.pi/agent/memory/MEMORY.local.md"
 
   install_paq
 

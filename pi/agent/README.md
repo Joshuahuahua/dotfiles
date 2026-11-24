@@ -23,6 +23,7 @@ Current symlinks on this machine (`~/.pi/agent/<name>` -> `pi/agent/<name>` in t
 - `memory/MEMORY.md`
 - `memory/projects/`
 - `memory/tone-profile-user.md`, `memory/tone-profile-wiki.md`
+- `memory/MEMORY.local.md` (compact memory loaded in local qwen mode)
 - `models.json`
 - `subagents.json`
 - `bin/`
@@ -46,3 +47,13 @@ ln -s ~/development/clones/dotfiles/pi/agent/<name> ~/.pi/agent/<name>
 ```
 
 (adjust the repo path if the clone lives elsewhere).
+
+## Claude / local qwen modes
+
+The active model decides the mode. Provider `home-ollama` is local mode, anything else is cloud mode.
+
+- `extensions/model-profile.ts` injects `extensions/profiles/{cloud,local}.md` and shrinks the prompt in local mode.
+- `extensions/delegation-policy.ts` enforces one local child at a time (and one child total in local mode).
+- `extensions/model-fallback.ts` switches to local qwen when a cloud model returns `429 quota exceeded`.
+- `extensions/set-thinking.ts` lets the model change its own thinking level (cloud mode).
+- `agents/`: `scout` and `worker` inherit the parent model. `local-scout`, `local-worker` and `local-researcher` are pinned to qwen.
