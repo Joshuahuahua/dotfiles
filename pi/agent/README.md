@@ -22,9 +22,15 @@ Current symlinks on this machine (`~/.pi/agent/<name>` -> `pi/agent/<name>` in t
 - `memory/bin/`
 - `memory/MEMORY.md`
 - `memory/projects/`
-
-Included in the repo but not necessarily symlinked on every machine:
+- `memory/tone-profile-user.md`, `memory/tone-profile-wiki.md`
+- `models.json`
+- `subagents.json`
+- `bin/`
+- `agents/`
 - `product-context/`
+
+Installed Pi packages (extensions from npm) are listed in `settings.json` under `packages`.
+Pi reinstalls them on startup, so only that list needs to be synced, not `npm/`.
 
 Intentionally **not** included here:
 - `auth.json`

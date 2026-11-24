@@ -255,6 +255,15 @@ main() {
   symlink_path "$REPO_ROOT/pi/agent/memory/bin" "$HOME/.pi/agent/memory/bin"
   symlink_path "$REPO_ROOT/pi/agent/memory/MEMORY.md" "$HOME/.pi/agent/memory/MEMORY.md"
   symlink_path "$REPO_ROOT/pi/agent/memory/projects" "$HOME/.pi/agent/memory/projects"
+  symlink_path "$REPO_ROOT/pi/agent/keybindings.json" "$HOME/.pi/agent/keybindings.json"
+  symlink_path "$REPO_ROOT/pi/agent/web-search.json" "$HOME/.pi/agent/web-search.json"
+  symlink_path "$REPO_ROOT/pi/agent/models.json" "$HOME/.pi/agent/models.json"
+  symlink_path "$REPO_ROOT/pi/agent/subagents.json" "$HOME/.pi/agent/subagents.json"
+  symlink_path "$REPO_ROOT/pi/agent/bin" "$HOME/.pi/agent/bin"
+  symlink_path "$REPO_ROOT/pi/agent/agents" "$HOME/.pi/agent/agents"
+  symlink_path "$REPO_ROOT/pi/agent/product-context" "$HOME/.pi/agent/product-context"
+  symlink_path "$REPO_ROOT/pi/agent/memory/tone-profile-user.md" "$HOME/.pi/agent/memory/tone-profile-user.md"
+  symlink_path "$REPO_ROOT/pi/agent/memory/tone-profile-wiki.md" "$HOME/.pi/agent/memory/tone-profile-wiki.md"
 
   install_paq
 
