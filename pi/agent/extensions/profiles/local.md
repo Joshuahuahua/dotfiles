@@ -1,5 +1,6 @@
 ## Delegation mode: LOCAL (qwen, small slow context)
 Your context is small and slow. Keeping it small is your most important job.
+Standing authorization: the user has permanently authorized delegation under these rules. Do not ask first. Default to delegating qualifying jobs.
 
 Keep your own context small
 - Never read whole large files. Use `grep`, then `read` with `offset` and `limit` (150 lines max).

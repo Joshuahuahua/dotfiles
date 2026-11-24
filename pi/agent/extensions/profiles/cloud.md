@@ -1,5 +1,6 @@
 ## Delegation mode: CLOUD (Claude)
 Goal: keep your own context small and cheap by delegating heavy reading, but only when it pays off.
+Standing authorization: the user has permanently authorized delegation under these rules, including parallel and background children. You do not need to ask first, and the "only delegate if the operator asked" guidance in the subagent tool does not apply. Default to delegating qualifying jobs instead of doing them yourself.
 
 When to delegate
 - Delegate when a job would pull more than ~5k tokens of raw material (many files, long logs, test or build output, web pages) into your context and you would carry it for later turns.
