@@ -2,12 +2,16 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
+import { isLocalModel } from "./lib/mode.ts";
 
 const MEMORY_ROOT = path.join(process.env.HOME || "", ".pi", "agent", "memory");
 const GLOBAL_MEMORY = path.join(MEMORY_ROOT, "MEMORY.md");
 const PROJECTS_DIR = path.join(MEMORY_ROOT, "projects");
 const MAX_GLOBAL_CHARS = 12000;
 const MAX_PROJECT_CHARS = 6000;
+const LOCAL_MEMORY = path.join(MEMORY_ROOT, "MEMORY.local.md");
+const MAX_LOCAL_CHARS = 2500;
+const MAX_LOCAL_PROJECT_CHARS = 1500;
 
 type MemoryScope = "global" | "project";
 
@@ -69,6 +73,17 @@ function saveMemory(scope: MemoryScope, cwd: string, text: string): { status: "a
 	const filePath = scope === "project" ? projectMemoryPath(cwd) : GLOBAL_MEMORY;
 	const heading = scope === "project" ? "Project memory" : "Remembered items";
 	return appendMemory(filePath, heading, text);
+}
+
+function buildLocalMemorySection(cwd: string): string {
+	ensureMemoryDirs();
+	const globalText = truncate(readText(LOCAL_MEMORY) || readText(GLOBAL_MEMORY), MAX_LOCAL_CHARS);
+	const projectFile = projectMemoryPath(cwd);
+	const projectText = truncate(readText(projectFile), MAX_LOCAL_PROJECT_CHARS);
+	const parts = [`Memory files: ${GLOBAL_MEMORY} (global), ${projectFile} (this project). Never store secrets.`];
+	if (globalText) parts.push(`<assistant-memory>\n${globalText}\n</assistant-memory>`);
+	if (projectText) parts.push(`<project-memory>\n${projectText}\n</project-memory>`);
+	return parts.join("\n\n");
 }
 
 function buildMemorySection(cwd: string): string {
@@ -182,13 +197,13 @@ export default function persistentMemory(pi: ExtensionAPI) {
 		ensureMemoryDirs();
 	});
 
-	pi.on("before_agent_start", async (event) => {
+	pi.on("before_agent_start", async (event, ctx) => {
 		const cwd = event.systemPromptOptions.cwd || currentCwd;
 		if (!cwd) return;
 
-		const memorySection = buildMemorySection(cwd);
-		return {
-			systemPrompt: `${event.systemPrompt}\n\n${memorySection}`,
-		};
+		const memorySection = isLocalModel(ctx.model) ? buildLocalMemorySection(cwd) : buildMemorySection(cwd);
+		// Structured section (not a systemPrompt return) so other extensions' prompt edits are kept.
+		const sections = ((event.systemPromptOptions as any).sections ??= {});
+		sections["persistent-memory"] = memorySection;
 	});
 }

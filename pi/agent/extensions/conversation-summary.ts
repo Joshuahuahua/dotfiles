@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { isLocalModel } from "./lib/mode.ts";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
 
@@ -197,36 +198,42 @@ export default function conversationSummary(pi: ExtensionAPI) {
 
 	// Inject the current conversation's living summary into the system prompt so
 	// the agent can keep extending it accurately each turn.
-	pi.on("before_agent_start", async (event) => {
+	pi.on("before_agent_start", async (event, ctx) => {
 		const cwd = event.systemPromptOptions.cwd || currentCwd;
+		const local = isLocalModel(ctx.model);
 		const existing = currentSessionId ? readSummary(currentSessionId) : undefined;
 
-		const parts = [
-			"## Conversation Summary",
-			"You maintain a living summary of THIS conversation, saved for later recall.",
-			"Update it with `update_conversation_summary` only when it is worth doing — NOT after every message.",
-			"Good moments to update: a meaningful unit of work or discovery is complete, e.g.",
-			"- file paths / directories were touched or decided on,",
-			"- a decision was taken or a change was actually made,",
-			"- a concrete fact/value/answer was discovered (a hex code, a URL, a command, a config value),",
-			"- a task or topic wraps up.",
-			"Skip updating for greetings, acknowledgements, clarifying questions, dead-end exploration, or anything that adds no new durable fact. When in doubt, batch small developments into one later update.",
-			"Keep the `title` accurate, but only revise it when the conversation's scope actually shifts (a new topic, changed focus) — not for every small addition. If several topics are covered, the title should mention each so the summary can be found by any of them (e.g. \"client html file changes and dark red hex code\").",
-			"Always pass the full, updated summary (it replaces the stored version); keep it concise, complete, and deduplicated. Do not store secrets or credentials.",
-			"When the user asks where/what something from a past conversation was, use `find_conversation_summaries` (titles only) to find the right one, then `read_conversation_summary` to load just that summary's details — don't ingest every summary.",
+		const parts = local
+			? [
+				"Keep a short living summary of this conversation with `update_conversation_summary` (full title + body, replaces the old one).",
+				"Update only after real progress: files touched, decisions, changes made, concrete values found. Never store secrets.",
+			]
+			: [
+				"## Conversation Summary",
+				"You maintain a living summary of THIS conversation, saved for later recall.",
+				"Update it with `update_conversation_summary` only when it is worth doing — NOT after every message.",
+				"Good moments to update: a meaningful unit of work or discovery is complete, e.g.",
+				"- file paths / directories were touched or decided on,",
+				"- a decision was taken or a change was actually made,",
+				"- a concrete fact/value/answer was discovered (a hex code, a URL, a command, a config value),",
+				"- a task or topic wraps up.",
+				"Skip updating for greetings, acknowledgements, clarifying questions, dead-end exploration, or anything that adds no new durable fact. When in doubt, batch small developments into one later update.",
+				"Keep the `title` accurate, but only revise it when the conversation's scope actually shifts (a new topic, changed focus) — not for every small addition. If several topics are covered, the title should mention each so the summary can be found by any of them (e.g. \"client html file changes and dark red hex code\").",
+				"Always pass the full, updated summary (it replaces the stored version); keep it concise, complete, and deduplicated. Do not store secrets or credentials.",
+				"When the user asks where/what something from a past conversation was, use `find_conversation_summaries` (titles only) to find the right one, then `read_conversation_summary` to load just that summary's details — don't ingest every summary.",
 		];
 
 		if (existing) {
 			parts.push(
-				`Current saved summary for this conversation (extend/refine it):\n<conversation-summary>\ntitle: ${existing.title}\n\n${truncate(existing.summary, MAX_INJECT_CHARS)}\n</conversation-summary>`,
+				`Current saved summary for this conversation (extend/refine it):\n<conversation-summary>\ntitle: ${existing.title}\n\n${truncate(existing.summary, local ? 1500 : MAX_INJECT_CHARS)}\n</conversation-summary>`,
 			);
 		} else {
 			parts.push("No summary saved yet for this conversation. Create one once a real topic emerges.");
 		}
 
-		return {
-			systemPrompt: `${event.systemPrompt}\n\n${parts.join("\n")}`,
-		};
+		// Structured section (not a systemPrompt return) so other extensions' prompt edits are kept.
+		const sections = ((event.systemPromptOptions as any).sections ??= {});
+		sections["conversation-summary"] = parts.join("\n");
 	});
 
 	pi.registerTool({
@@ -249,7 +256,7 @@ export default function conversationSummary(pi: ExtensionAPI) {
 			}),
 			summary: Type.String({
 				description:
-					"Full updated summary body (markdown ok): file paths, decisions, changes made, discovered facts/values. Replaces the stored version.",
+				"Full updated summary body (markdown ok): file paths, decisions, changes made, discovered facts/values. Replaces the stored version.",
 			}),
 		}),
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
