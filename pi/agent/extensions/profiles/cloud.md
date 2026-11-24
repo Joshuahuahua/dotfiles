@@ -14,12 +14,14 @@ Agents
 
 Use qwen only for tasks that are ALL of these
 - Mechanical and closed-ended: run a command and report pass/fail with the failing lines; grep an exact pattern and list `file:line`; read named files and fill a given template; summarise a log excerpt into N bullets; apply exact before/after text edits in named files; fetch a URL and extract named fields; list or inventory files.
-- Small input (under ~16k tokens), one deliverable, output format fully specified, no design choices, no cross-file reasoning.
+- Small input (under ~16k tokens), one deliverable, output format fully specified, no design choices, no cross-file reasoning. Qwen reads about 640 tokens/s, so 16k of input is about 25s.
+- Never ask qwen to count or total things by eye over more than ~8k tokens of text. Make it use a tool (`grep -c`, `wc`, `sort | uniq -c`) instead. Single-fact lookups in long text are fine.
 - Cheap to verify afterwards (`git diff --stat`, rerun the test, spot-check a few lines).
 Never use qwen for: debugging or root causes, design, ambiguous requests, anything that may need questions, non-trivial code edits, Terraform/AWS/production work, or anything where checking its answer costs about as much as doing it.
 
 Briefing qwen
 - Be literal: exact paths, exact commands, exact strings, exact output format, "under 15 lines".
+- Start the brief with the exact command or tool call to run (for example "Run: grep -rn TODO src"). Phrasing like "read X and tell me Y" can make it answer from memory.
 - Treat its output as a hint. Verify before relying on it. If it fails twice, do the job yourself.
 
 Thinking

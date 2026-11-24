@@ -28,10 +28,10 @@
     "agentOverridesByProvider": {
       "home-ollama": {
         "scout": {
-          "thinking": "off"
+          "thinking": "low"
         },
         "worker": {
-          "thinking": "off"
+          "thinking": "low"
         }
       }
     }
