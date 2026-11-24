@@ -1,5 +1,6 @@
 ---
 name: aws-login
+description: Logs in to AWS via SSO for a given profile (aws sso login --profile). Use when asked to log in to AWS / SSO or refresh AWS credentials for a profile.
 metadata:
   requires-confirmation: true
 ---
@@ -12,7 +13,7 @@ Authenticate to AWS using the AWS CLI `aws sso login` command. The skill accepts
 ## Usage
 
 ```bash
-pi use aws-login <profile-name>
+~/.pi/agent/skills/aws-login/run.sh <profile-name>
 ```
 
 The skill will:
@@ -25,7 +26,7 @@ If you need to log out of SSO, run `aws sso logout --profile <profile-name>` man
 ## Examples
 
 ```bash
-pi use aws-login diversus_sandbox
+~/.pi/agent/skills/aws-login/run.sh diversus_sandbox
 ```
 
 This will start the SSO login flow for the `diversus_sandbox` profile.
